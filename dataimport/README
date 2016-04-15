@@ -1,0 +1,60 @@
+#Landsat Search and Download
+The following library provides to for conducting search and downloading of NASA Landsat 8 data vis the AWS api. Substantial code is sourced from the landsat-util library.
+
+
+##The Search Library
+The following functions are defined for the `search` class:
+
+	class Search:
+
+The function `search` is the main user facing function: 
+
+	Search.search(paths_rows=None, lat=None, lon=None, address=None, end_date=None, cloud_min=None, cloud_max=None, limit=1, geojson=False)
+
+- `paths_rows=None` is a string in the format: `'003,003,004,004'` which gives a landsat path/row reference.
+- `lat=None` is a string, float, or integer denoting a latitude.
+- `lon=None` is a string, float, or integer denoting a longitude.
+- `address=None` is a string denoting an address.
+- `start_date=None` is a date string in format YYY-MM-DD denoting a start date.
+- `end_date=None`  is a date string in format YYY-MM-DD denoting an end date.
+- `cloud_min` is a float denoting the minimal cloud coverage.
+- `cloud_max` is a float denoting the maximal cloud coverage.
+- `limit` is an integer which gives the maximum number of search results returned.
+- `geojson`* is a boolean value denoting whether a geojson object would be returned 
+
+The function returns a dictionary that looks like the following:
+
+	{
+	    'status': u'SUCCESS',
+	    'total_returned': 1,
+	    'total': 1,
+	    'limit': 1
+	    'results': [
+	        {
+	            'sat_type': u'L8',
+	            'sceneID': u'LC80030032014142LGN00',
+	            'date': u'2014-05-22',
+	            'path': u'003',
+	            'thumbnail': u'http://....../landsat_8/2014/003/003/LC80030032014142LGN00.jpg',
+	            'cloud': 33.36,
+	            'row': u'003
+	        }
+	    ]
+    }
+
+* looking for proper removal
+
+
+##The Download Library
+The following functions are defined for the `download` class:
+
+	class Download(object):
+
+The function `download` is the main funcion for this class:
+
+	Download.download(scenes, bands=None)
+
+- `scenes` is a string denoting a scene IDs
+- `bands=None` is a list of bands to be downloaded for the given scene
+
+The function downloads the file requested and returns a tuple consisting of the scene id successfully downloaded paired with the source they were downloaded from (amazon or google).
