@@ -1,24 +1,15 @@
-from __future__ import print_function, division, absolute_import
-
 import json
 import time
 import requests
 import settings
 from utils import threeDigitPad
 
-def threeDigitPad(number):
-    number = str(number)
-    if len(number) == 1:
-        return u'00%s' % number
-    elif len(number) == 2:
-        return u'0%s' % number
-    else:
-        return number
 
 
 class Search(object):
     def __init__(self):
         self.api_url = settings.API_URL
+
 
     def search(self, paths_rows=None, lat=None, lon=None, address=None, start_date=None, end_date=None, cloud_min=None,
                cloud_max=None, limit=1, geojson=False):
@@ -79,6 +70,7 @@ class Search(object):
                                       for i in r_dict['results']]
         return result
 
+
     def query_builder(self, paths_rows=None, lat=None, lon=None, address=None, start_date=None, end_date=None,
                       cloud_min=None, cloud_max=None):
         query = []
@@ -115,19 +107,24 @@ class Search(object):
             search_string = or_string + and_string
         return search_string
 
+
     def row_path_builder(self, path='', row=''):
         return 'path:%s+AND+row:%s' % (path, row)
+
 
     def date_range_builder(self, start='2013-02-11', end=None):
         if not end: end = time.strftime('%Y-%m-%d')
         return 'acquisitionDate:[%s+TO+%s]' % (start, end)
 
+
     def cloud_cover_prct_range_builder(self, min=0, max=100):
         return 'cloudCoverFull:[%s+TO+%s]' % (min, max)
+
 
     def address_builder(self, address):
         geocoded = geocode(address)
         return self.lat_lon_builder(**geocoded)
+
 
     def lat_lon_builder(self, lat=0, lon=0):
         return ('upperLeftCornerLatitude:[%s+TO+1000]+AND+lowerRightCornerLatitude:[-1000+TO+%s]'
