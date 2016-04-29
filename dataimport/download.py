@@ -1,36 +1,54 @@
-from __future__ import print_function, division, absolute_import
-
-from xml.etree import ElementTree
 from os.path import join, exists, getsize
 import os
-
 import requests
-import tarfile
 
-from utils import check_create_folder, url_builder, remote_file_exists, get_remote_file_size, scene_interpreter
+from utils import(
+    check_create_folder,
+    url_builder,
+    remote_file_exists,
+    get_remote_file_size,
+    scene_interpreter,
+    extractTar,
+    ExceptionObj
+)
 import settings
 
 
 
-class ExceptionObj:
-    def __init__(self, errCode): self.errCode = errCode
-
-
-
-class Downloading:
+class DownloadStatus:
     def __init__(self, total):
-        self.dl = 0
+        self.prog = 0
         self.tot = total
 
+    def update(self, change):
+        self.prog += change
+        print('Download: {0}/{1}'.format(self.prog, self.tot))
+        return(0)
 
-    def update(dl):
-        self.dl = dl
+    def completed():
+        return(self.prog == self.tot)
+
+
+
+class ExtractionStatus:
+    def __init__(self):
+        self.prog = 0
+        self.tot = 1
+    
+    def updateTot(self, total):
+        self.tot = total
+        return(0)
+
+    def updateProg(self, change):
+        print('Extract: {0}/{1}'.format(self.prog, self.tot))
+        self.prog = change
+        return(0)
 
 
 
 class Downloader(object):
-    def __init__(self, verbose=False, download_dir='../data/rawdata'):
-        self.status = 'idle'
+    def __init__(self, verbose=False, download_dir=settings.DOWNLOAD_DIR):
+        self.status = None
         self.download_dir = download_dir
         self.google = settings.GOOGLE_STORAGE
         self.s3 = settings.S3_LANDSAT
@@ -42,8 +60,8 @@ class Downloader(object):
             return(ExceptionObj('Scene {0} already exists'.format(scene)))
         check_create_folder(self.download_dir + '/' + scene)
 
-        code = self.google_storage(scene)
-        if code != 0: self.amazon_s3(scene)
+        return(self.google_storage(scene))
+        #if code != 0: self.amazon_s3(scene)
 
 
     def google_storage(self, scene):
@@ -66,20 +84,24 @@ class Downloader(object):
 
     def fetch(self, url, scene):
         total = get_remote_file_size(url)
-        self.status = Downloading(total)
+        self.status = DownloadStatus(total)
 
-        r = requests.get(url)
+        r = requests.get(url, stream = True)
         f = open(self.download_dir + '/' + scene + 'temp', 'wb')
-        for chunk in r.iter_content(chunk_size=512 * 1024): 
+        for chunk in r.iter_content(): 
             if chunk:
                 f.write(chunk)
+                self.status.update(len(chunk))
         f.close()
 
-        self.status = 'extracting'
-        tfile = tarfile.open(self.download_dir + '/' + scene + 'temp', 'r')
-        tfile.extractall(self.download_dir + '/' + scene)
+        self.status = ExtractionStatus()
+        extractTar(
+            self.download_dir + '/' + scene + 'temp',
+            self.download_dir + '/' + scene,
+            self.status
+        )
         os.remove(self.download_dir + '/' + scene + 'temp')
-        self.status = 'idle'
+        self.status = None
         return(0)
 
 
@@ -97,5 +119,3 @@ class Downloader(object):
             filename = '%s_%s.txt' % (sat['scene'], band)
 
         return url_builder([self.s3, sat['sat'], sat['path'], sat['row'], sat['scene'], filename])
-
-

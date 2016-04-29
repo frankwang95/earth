@@ -1,7 +1,10 @@
 import datetime
 from calendar import monthrange
 import search
+import settings
 import download
+
+
 
 class DownloadScheduler:
 	def __init__(self):
@@ -17,7 +20,7 @@ class DownloadScheduler:
 		results = self.s.search(
 			start_date = '{0}-{1}-01'.format(yr, mon),
 			end_date = '{0}-{1}-{2}'.format(yr, mon, nDays),
-			cloud_max = 50,
+			cloud_max = settings.CLOUD_MAX
 			limit = 10000
 		)
 		if results['status'] == u'SUCCESS': return(results['results'])
