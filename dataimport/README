@@ -49,9 +49,13 @@ The following functions are defined for the `download` class:
 
 The function `download` is the main funcion for this class:
 
-	Download.download(scenes, bands=None)
+	Download.download(scene)
 
-- `scenes` is a string denoting a scene IDs
-- `bands=None` is a list of bands to be downloaded for the given scene
+- `scene` is a string denoting a scene ID to download
 
-The function downloads the file requested and returns a tuple consisting of the scene id successfully downloaded paired with the source they were downloaded from (amazon or google).
+The function downloads and extracts the file requested and returns a tuple consisting of the scene id successfully downloaded paired with the source they were downloaded from (amazon or google). The function also inserts mysql indexes for the data obtained.
+
+
+##TODO
+- Implement mysql indexing of files
+- Implement scheduler process
