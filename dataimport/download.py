@@ -9,6 +9,7 @@ from utils import(
     get_remote_file_size,
     scene_interpreter,
     extractTar,
+    metadataParser,
     ExceptionObj
 )
 import settings
@@ -24,10 +25,7 @@ class DownloadStatus:
         self.prog += change
         print('Download: {0}/{1}'.format(self.prog, self.tot))
         return(0)
-
-    def completed():
-        return(self.prog == self.tot)
-
+        
 
 
 class ExtractionStatus:
@@ -88,7 +86,7 @@ class Downloader(object):
 
         r = requests.get(url, stream = True)
         f = open(self.download_dir + '/' + scene + 'temp', 'wb')
-        for chunk in r.iter_content(): 
+        for chunk in r.iter_content(chunk_size=2048): 
             if chunk:
                 f.write(chunk)
                 self.status.update(len(chunk))
@@ -117,5 +115,8 @@ class Downloader(object):
             filename = '%s_B%s.TIF' % (sat['scene'], band)
         else:
             filename = '%s_%s.txt' % (sat['scene'], band)
-
         return url_builder([self.s3, sat['sat'], sat['path'], sat['row'], sat['scene'], filename])
+
+d = Downloader()
+d.download('LC81420402016114LGN00')
+print('done')

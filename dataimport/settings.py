@@ -3,9 +3,9 @@
 
 ############################### MAIN SETTINGS #############################
 CLOUD_MAX = 50
-
 DOWNLOAD_DIR = '../data/rawdata'
-PREPROC_DIR = '../data/preprocessing'
+
+# mysql-settings
 
 
 

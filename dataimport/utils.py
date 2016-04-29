@@ -6,6 +6,12 @@ import requests
 
 
 
+############################### EXCEPTION OBJECT #############################
+class ExceptionObj:
+    def __init__(self, errCode): self.errCode = errCode
+
+
+
 ############################### TAR STATUS #############################
 def get_file_progress_file_object_class():
     class FileProgressFileObject(tarfile.ExFileObject):
@@ -34,12 +40,6 @@ def extractTar(path, target, status):
     tar = tarfile.open(fileobj=ProgressFileObject(path, status))
     tar.extractall(target)
     tar.close()
-
-
-
-############################### EXCEPTION OBJECT #############################
-class ExceptionObj:
-    def __init__(self, errCode): self.errCode = errCode
 
 
 
@@ -92,6 +92,6 @@ def scene_interpreter(scene):
     }
 
 
-def metaDataParser(scene):
+def metadataParser(scene):
     return(0)
 
