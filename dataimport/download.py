@@ -23,7 +23,6 @@ class DownloadStatus:
 
     def update(self, change):
         self.prog += change
-        print('Download: {0}/{1}'.format(self.prog, self.tot))
         return(0)
         
 
@@ -38,7 +37,6 @@ class ExtractionStatus:
         return(0)
 
     def updateProg(self, change):
-        print('Extract: {0}/{1}'.format(self.prog, self.tot))
         self.prog = change
         return(0)
 

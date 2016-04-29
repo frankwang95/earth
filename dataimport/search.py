@@ -12,7 +12,7 @@ class Search(object):
 
 
     def search(self, paths_rows=None, lat=None, lon=None, address=None, start_date=None, end_date=None, cloud_min=None,
-               cloud_max=None, limit=1, geojson=False):
+               cloud_max=None, limit=1):
         search_string = self.query_builder(paths_rows, lat, lon, address, start_date, end_date, cloud_min, cloud_max)
         r = requests.get('%s?search=%s&limit=%s' % (self.api_url, search_string, limit))
         r_dict = json.loads(r.text)
@@ -24,50 +24,18 @@ class Search(object):
             result['message'] = r_dict['error']['message']
        
         elif 'meta' in r_dict:
-            if geojson:
-                result = {
-                    'type': 'FeatureCollection',
-                    'features': []
-                }
-                for r in r_dict['results']:
-                    feature = {
-                        'type': 'Feature',
-                        'properties': {
-                            'sceneID': r['sceneID'],
-                            'row': threeDigitPad(r['row']),
-                            'path': threeDigitPad(r['path']),
-                            'thumbnail': r['browseURL'],
-                            'date': r['acquisitionDate'],
-                            'cloud': r['cloudCoverFull']
-                        },
-                        'geometry': {
-                            'type': 'Polygon',
-                            'coordinates': [
-                                [
-                                    [r['upperLeftCornerLongitude'], r['upperLeftCornerLatitude']],
-                                    [r['lowerLeftCornerLongitude'], r['lowerLeftCornerLatitude']],
-                                    [r['lowerRightCornerLongitude'], r['lowerRightCornerLatitude']],
-                                    [r['upperRightCornerLongitude'], r['upperRightCornerLatitude']],
-                                    [r['upperLeftCornerLongitude'], r['upperLeftCornerLatitude']]
-                                ]
-                            ]
-                        }
-                    }
-
-                    result['features'].append(feature)
-            else:
-                result['status'] = u'SUCCESS'
-                result['total'] = r_dict['meta']['results']['total']
-                result['limit'] = r_dict['meta']['results']['limit']
-                result['total_returned'] = len(r_dict['results'])
-                result['results'] = [{'sceneID': i['sceneID'],
-                                      'sat_type': u'L8',
-                                      'path': threeDigitPad(i['path']),
-                                      'row': threeDigitPad(i['row']),
-                                      'thumbnail': i['browseURL'],
-                                      'date': i['acquisitionDate'],
-                                      'cloud': i['cloudCoverFull']}
-                                      for i in r_dict['results']]
+            result['status'] = u'SUCCESS'
+            result['total'] = r_dict['meta']['results']['total']
+            result['limit'] = r_dict['meta']['results']['limit']
+            result['total_returned'] = len(r_dict['results'])
+            result['results'] = [{'sceneID': i['sceneID'],
+                                  'sat_type': u'L8',
+                                  'path': threeDigitPad(i['path']),
+                                  'row': threeDigitPad(i['row']),
+                                  'thumbnail': i['browseURL'],
+                                  'date': i['acquisitionDate'],
+                                  'cloud': i['cloudCoverFull']}
+                                  for i in r_dict['results']]
         return result
 
 

@@ -9,7 +9,7 @@ The following functions are defined for the `search` class:
 
 The function `search` is the main user facing function: 
 
-	Search.search(paths_rows=None, lat=None, lon=None, address=None, end_date=None, cloud_min=None, cloud_max=None, limit=1, geojson=False)
+	Search.search(paths_rows=None, lat=None, lon=None, address=None, end_date=None, cloud_min=None, cloud_max=None, limit=1)
 
 - `paths_rows=None` is a string in the format: `'003,003,004,004'` which gives a landsat path/row reference.
 - `lat=None` is a string, float, or integer denoting a latitude.
@@ -20,7 +20,6 @@ The function `search` is the main user facing function:
 - `cloud_min` is a float denoting the minimal cloud coverage.
 - `cloud_max` is a float denoting the maximal cloud coverage.
 - `limit` is an integer which gives the maximum number of search results returned.
-- `geojson`* is a boolean value denoting whether a geojson object would be returned 
 
 The function returns a dictionary that looks like the following:
 
@@ -41,8 +40,6 @@ The function returns a dictionary that looks like the following:
 	        }
 	    ]
     }
-
-* looking for proper removal
 
 
 ##The Download Library
