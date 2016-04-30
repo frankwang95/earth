@@ -8,66 +8,38 @@ from utils import(
     remote_file_exists,
     get_remote_file_size,
     scene_interpreter,
-    extractTar,
-    metadataParser,
-    ExceptionObj
+    ExceptionObj,
+    DownloadStatus
 )
 import settings
 
 
 
-class DownloadStatus:
-    def __init__(self, total):
-        self.prog = 0
-        self.tot = total
-
-    def update(self, change):
-        self.prog += change
-        return(0)
-        
-
-
-class ExtractionStatus:
-    def __init__(self):
-        self.prog = 0
-        self.tot = 1
-    
-    def updateTot(self, total):
-        self.tot = total
-        return(0)
-
-    def updateProg(self, change):
-        self.prog = change
-        return(0)
-
-
 
 class Downloader(object):
-    def __init__(self, verbose=False, download_dir=settings.DOWNLOAD_DIR):
-        self.status = None
+    def __init__(self, download_dir=settings.DOWNLOAD_DIR):
+        self.status = 'IDLE'
         self.download_dir = download_dir
         self.google = settings.GOOGLE_STORAGE
         self.s3 = settings.S3_LANDSAT
         check_create_folder(self.download_dir)
 
 
-    def download(self, scene):
+    def download(self, scene, status=None):
         if str(scene) in os.listdir(self.download_dir):
             return(ExceptionObj('Scene {0} already exists'.format(scene)))
         check_create_folder(self.download_dir + '/' + scene)
 
-        return(self.google_storage(scene))
+        return(self.google_storage(scene, status))
         #if code != 0: self.amazon_s3(scene)
 
 
-    def google_storage(self, scene):
+    def google_storage(self, scene, status):
         interpScene = scene_interpreter(scene)
         url = self.google_storage_url(interpScene)
         check = remote_file_exists(url)
 
-        if check == 0:
-            self.fetch(url, scene)
-            return(0)
+        if check == 0: return(self.fetch(url, scene, status))
         return(check)
 
 
@@ -76,29 +48,6 @@ class Downloader(object):
         url = None
         check = remote_file_exists(url)
         return(check)
-
-
-    def fetch(self, url, scene):
-        total = get_remote_file_size(url)
-        self.status = DownloadStatus(total)
-
-        r = requests.get(url, stream = True)
-        f = open(self.download_dir + '/' + scene + 'temp', 'wb')
-        for chunk in r.iter_content(chunk_size=2048): 
-            if chunk:
-                f.write(chunk)
-                self.status.update(len(chunk))
-        f.close()
-
-        self.status = ExtractionStatus()
-        extractTar(
-            self.download_dir + '/' + scene + 'temp',
-            self.download_dir + '/' + scene,
-            self.status
-        )
-        os.remove(self.download_dir + '/' + scene + 'temp')
-        self.status = None
-        return(0)
 
 
 ### Gets google download url given an interpreted scene ID
@@ -115,6 +64,25 @@ class Downloader(object):
             filename = '%s_%s.txt' % (sat['scene'], band)
         return url_builder([self.s3, sat['sat'], sat['path'], sat['row'], sat['scene'], filename])
 
-d = Downloader()
-d.download('LC81420402016114LGN00')
-print('done')
+
+    def fetch(self, url, scene, status):
+        print status
+        if status==None:
+            self.status = DownloadStatus()
+        else: self.status = status
+
+        self.status.updateTotal(get_remote_file_size(url))
+
+
+
+        r = requests.get(url, stream = True)
+        f = open(self.download_dir + '/' + scene + '/' + scene, 'wb')
+        for chunk in r.iter_content(chunk_size=2048): 
+            if chunk:
+                f.write(chunk)
+                self.status.updateProg(len(chunk))
+        f.close()
+
+        self.status.completed()
+        self.status = 'IDLE'
+        return(0)

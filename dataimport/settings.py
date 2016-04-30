@@ -2,8 +2,10 @@
 
 
 ############################### MAIN SETTINGS #############################
-CLOUD_MAX = 50
 DOWNLOAD_DIR = '../data/rawdata'
+
+CLOUD_MAX = 50
+DAY_DELAY = 30
 
 # mysql-settings
 
