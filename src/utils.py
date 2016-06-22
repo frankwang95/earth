@@ -40,7 +40,8 @@ def generateFilePathStr(sceneid = '', type = 'raw', file = ''):
 		path = settings.DATA_DIR + '/preproc/{0}/'.format(sceneid) + file
 		return(path)
 		
-	return(ExceptionObj('invalid data type'))
+	return(ExceptionObj('invalid scene inputs'))
+
 
 
 def check_create_folder(folder_path):

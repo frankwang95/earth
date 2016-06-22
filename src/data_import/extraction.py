@@ -111,9 +111,8 @@ class Extractor(object):
 
 
     def extract(self, sceneid, status = None):
-        path = generateFilePathStr(sceneid)
-        if isinstance(path, ExceptionObj):
-            return(ExceptionObj('requested scene {0} has probably not yet been downloaded'.format(scene), path))
+        if not os.path.exists(generateFilePathStr(sceneid)):
+            return(ExceptionObj('Scene not yet downloaded'))
 
         if status == None: self.status = ExtractionStatus()
         else: self.status = status
@@ -130,8 +129,9 @@ class Extractor(object):
 
 
         except:
-            os.remove(generateFilePathStr(sceneid, file = 'tar'))
-            os.remove(generateFilePathStr(sceneid))
+            for i in os.listdir(generateFilePathStr(sceneid)):
+                os.remove(generateFilePathStr(sceneid, file = 'tar'))
+            os.rmdir(generateFilePathStr(sceneid))
             return(ExceptionObj('extraction failed'))
         
         return(0)

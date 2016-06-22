@@ -11,7 +11,7 @@ from dataImportUtils import(
 	scene_interpreter,
 	DownloadStatus
 )
-from utils import generateFilePathStr, ExceptionObj, check_create_folder,
+from utils import generateFilePathStr, ExceptionObj, check_create_folder
 import dataImportSettings as settings
 
 
