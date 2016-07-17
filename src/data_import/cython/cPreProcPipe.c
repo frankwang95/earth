@@ -236,23 +236,3 @@ void c16to8 (uint16_t* inArr, uint8_t* outArr, int n, int m) {
 		}
 	}
 }
-
-
-void cWrite3x3 (uint16_t* inArr, int n, int m, char* path) {
-	int i, j;
-	char filepath[100];
-	FILE* file;
-	for (i = 0; i < n - 2; ++i) {
-		for (j = 0; j < m - 2; ++j) {
-			sprintf(filepath, "%s/%d-%d", path, i, j);
-			file = fopen(filepath, "w");
-			fprintf (file, "test");
-			fclose(file);
-		}
-	}
-}
-
-
-int main() {
-	return(0);
-}

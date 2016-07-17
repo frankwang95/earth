@@ -32,5 +32,3 @@ void cLuminosityBlend (uint16_t* color, uint16_t* grey, int n, int m);
 void cAdjustLevels (uint16_t* inArr, int n, int m);
 
 void c16to8 (uint16_t* inArr, uint8_t* outArr, int n, int m);
-
-void cWrite3x3 (uint16_t* inArr, int n, int m, char* path);

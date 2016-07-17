@@ -13,7 +13,13 @@ class ExceptionObj:
 
 
 ############################### FILE PATH TOOLS #############################
-def generateFilePathStr(sceneid = '', type = 'raw', file = ''):
+def generateFilePathStr(sceneid = '', type = '', file = ''):
+	if type == 'database':
+		if sceneid == '': return(settings.DATA_DIR + '/preproc/database.hdf5f')
+		else: file = '/' + sceneid + '/' + file
+		return(file)
+		
+
 	if type == 'raw':
 		if file == 'metadata': file = sceneid + '_MTL.txt'
 		elif file == 'tar': file = sceneid
@@ -33,14 +39,16 @@ def generateFilePathStr(sceneid = '', type = 'raw', file = ''):
 		path = settings.DATA_DIR + '/raw/{0}/'.format(sceneid) + file
 		return(path)
 
+
 	if type == 'preproc':
-		if file == 'visible': file = sceneid + '_V.TIF'
-		elif file == 'coord': file = sceneid + '_C.TIF'
+		if file == 'visible': file += '/'
+		if sceneid != '':
+			file += sceneid + '_V.TIF'
 		
-		path = settings.DATA_DIR + '/preproc/{0}/'.format(sceneid) + file
+		path = settings.DATA_DIR + '/preproc/' + file
 		return(path)
 		
-	return(ExceptionObj('invalid scene inputs'))
+	return(settings.DATA_DIR)
 
 
 

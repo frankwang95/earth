@@ -12,7 +12,7 @@ from dataImportUtils import(
 	DownloadStatus
 )
 from utils import generateFilePathStr, ExceptionObj, check_create_folder
-import dataImportSettings as settings
+import settings
 
 
 
@@ -21,13 +21,12 @@ class Downloader(object):
 		self.status = 'IDLE'
 		self.google = settings.GOOGLE_STORAGE
 		self.s3 = settings.S3_LANDSAT
-		check_create_folder(generateFilePathStr())
 
 
 	def download(self, sceneid, status=None):
-		if os.path.exists(generateFilePathStr(sceneid)):
+		if os.path.exists(generateFilePathStr(sceneid, 'raw')):
 			return(ExceptionObj('scene {0} already exists'.format(sceneid)))
-		check_create_folder(generateFilePathStr(sceneid))
+		check_create_folder(generateFilePathStr(sceneid, 'raw'))
 
 		return(self.google_storage(sceneid, status))
 		#if code != 0: self.amazon_s3(scene)
@@ -72,7 +71,7 @@ class Downloader(object):
 		self.status.updateTotal(get_remote_file_size(url))
 
 		r = requests.get(url, stream = True)
-		f = open(generateFilePathStr(sceneid, file = 'tar'), 'wb')
+		f = open(generateFilePathStr(sceneid, 'raw', 'tar'), 'wb')
 		for chunk in r.iter_content(chunk_size=2048): 
 			if chunk:
 				f.write(chunk)

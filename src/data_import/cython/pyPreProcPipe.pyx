@@ -55,12 +55,3 @@ def py16to8 (inArr, outArr):
 		inArr.shape[0],
 		inArr.shape[1]
 	)
-
-
-def pyWrite3x3 (inArr, path):
-	return cWrite3x3 (
-		<np.uint8_t*> np.PyArray_DATA(inArr),
-		inArr.shape[0],
-		inArr.shape[1],
-		<char*> path 
-	)

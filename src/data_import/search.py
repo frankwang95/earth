@@ -5,7 +5,7 @@ import requests
 
 sys.path.insert(0,'..')
 from dataImportUtils import threeDigitPad
-from dataImportSettings import API_URL
+from settings import API_URL
 
 
 

@@ -2,6 +2,7 @@ import curses
 import curses.textpad
 import os
 import time
+import threading
 
 
 
@@ -29,7 +30,6 @@ class SchedulerIO:
 	def __init__(self, sched):
 		self.sched = sched
 		self.shutdownT = False
-		self.shutdownTimer = 100
 
 		self.stdscr = curses.initscr()
 		self.stdscr.keypad(1)
@@ -39,13 +39,15 @@ class SchedulerIO:
 
 		# SET COLORS
 		curses.start_color()
-		curses.init_color(20, 400, 400, 400);
-		# unselected tab
-		curses.init_pair(1, curses.COLOR_BLACK, 20)
-		# selected tab
+		try:
+			curses.init_color(20, 400, 400, 400)
+			curses.init_pair(1, curses.COLOR_BLACK, 20)
+		except:
+			curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
 		curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
 		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 		curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)
+		curses.init_pair(5, curses.COLOR_RED, curses.COLOR_BLACK)
 
 		# SET PARAMETERS
 		self.winTabs = ['Log', 'Schedule', 'Status']
@@ -73,12 +75,7 @@ class SchedulerIO:
 
 		self.stdscr.refresh()
 
-		while not self.shutdownT or self.shutdownTimer > 0:
-			self.mainWin.erase()
-
-			if self.shutdownT:
-				self.shutdownTimer -= 1
-
+		while not self.sched.shutdownT or threading.active_count() > 1:
 			self.mainWin.erase()
 
 			c = self.stdscr.getch()
@@ -105,6 +102,7 @@ class SchedulerIO:
 			self.mainWin.refresh()
 			self.inWin.refresh()
 			time.sleep(0.2)
+
 		curses.endwin()
 
 
@@ -120,15 +118,21 @@ class SchedulerIO:
 
 		self.mainWin.addstr(1, 4, 'downloader ', curses.A_BOLD)
 		self.mainWin.addstr(1, 15, 'is ')
-		if self.sched.pausedDownloadT or self.sched.pausedT:
+		if self.sched.shutdownDownloadT:
+			self.mainWin.addstr(1, 18, 'shutdown', curses.color_pair(5))
+		elif self.sched.pausedDownloadT or self.sched.pausedT:
 			self.mainWin.addstr(1, 18, 'paused', curses.color_pair(3))
-		else: self.mainWin.addstr(1, 18, 'running', curses.color_pair(4))
+		else:
+			self.mainWin.addstr(1, 18, 'running', curses.color_pair(4))
 
-		self.mainWin.addstr(2, 4, 'extractor ', curses.A_BOLD)
-		self.mainWin.addstr(2, 14, 'is ')
-		if self.sched.pausedExtractT or self.sched.pausedT:
-			self.mainWin.addstr(2, 17, 'paused', curses.color_pair(3))
-		else: self.mainWin.addstr(2, 17, 'running', curses.color_pair(4))
+		self.mainWin.addstr(2, 4, 'preprocessor ', curses.A_BOLD)
+		self.mainWin.addstr(2, 17, 'is ')
+		if self.sched.shutdownExtractT:
+			self.mainWin.addstr(2, 20, 'shutdown', curses.color_pair(5))
+		elif self.sched.pausedExtractT or self.sched.pausedT:
+			self.mainWin.addstr(2, 20, 'paused', curses.color_pair(3))
+		else:
+			self.mainWin.addstr(2, 20, 'running', curses.color_pair(4))
 
 		self.mainWin.addstr(4, 0, 'SCHEDULER STATISTICS', curses.A_BOLD | curses.A_UNDERLINE)
 
@@ -143,11 +147,11 @@ class SchedulerIO:
 	def dispSchedule(self):
 		self.mainWin.addstr(0, 0, 'AUTO DOWNLOAD QUEUE', curses.A_BOLD | curses.A_UNDERLINE)
 		self.mainWin.addstr(0, 80, 'MANUAL DOWNLOAD QUEUE', curses.A_BOLD | curses.A_UNDERLINE)
-		self.mainWin.addstr(0, 160, 'EXTRACTION QUEUE', curses.A_BOLD | curses.A_UNDERLINE)
+		self.mainWin.addstr(0, 160, 'PREPROCESSING QUEUE', curses.A_BOLD | curses.A_UNDERLINE)
 		
-		autoDownloadQueue = self.sched.d_queue_auto[:self.winH / 5]
-		manDownloadQueue = self.sched.d_queue_man[:self.winH / 5]
-		extQueue = self.sched.e_queue[:self.winH / 5]
+		autoDownloadQueue = self.sched.d_queue_auto[:(self.winH - 3) / 5]
+		manDownloadQueue = self.sched.d_queue_man[:(self.winH - 3) / 5]
+		extQueue = self.sched.p_queue[:(self.winH - 3) / 5]
 
 		yn = 0
 		for task in autoDownloadQueue:
@@ -174,7 +178,7 @@ class SchedulerIO:
 			self.mainWin.addstr(y + 2, x, 'pending download', curses.color_pair(3))
 		else:
 			prog = float(task.status.prog)/task.status.tot
-			self.mainWin.addstr(y + 2, x, 'downloading', curses.color_pair(4))
+			self.mainWin.addstr(y + 2, x, 'downloading {0}/{1}'.format(task.status.prog, task.status.tot), curses.color_pair(4))
 			self.mainWin.addstr(y + 3, x, progBar(prog, 75))
 
 
@@ -183,10 +187,15 @@ class SchedulerIO:
 		self.mainWin.addstr(y, x + 9, task.id)
 		self.mainWin.addstr(y + 1, x, 'location: ' + 'NULL')
 		if task.status == 'PENDING':
-			self.mainWin.addstr(y + 2, x, 'pending extraction', curses.color_pair(3))
+			self.mainWin.addstr(y + 2, x, 'pending processing', curses.color_pair(3))
 		else:
 			prog = float(task.status.prog)/task.status.tot
-			self.mainWin.addstr(y + 2, x, 'extracting', curses.color_pair(4))
+			if task.status.prog < 13:
+				self.mainWin.addstr(y + 2, x, 'extracting {0}/13'.format(task.status.prog), curses.color_pair(4))
+			elif task.status.prog == 13:
+				self.mainWin.addstr(y + 2, x, 'writing to HDF5 group', curses.color_pair(4))
+			elif task.status.prog > 13:
+				self.mainWin.addstr(y + 2, x, 'writing pansharpened visible imagery', curses.color_pair(4))
 			self.mainWin.addstr(y + 3, x, progBar(prog, 75))
 		return(0)
 
@@ -195,7 +204,6 @@ class SchedulerIO:
 		cmdspl = cmd.split()
 		if cmdspl[0] == 'shutdown':
 			self.currTab = 0 # changes to log window
-			self.shutdownT = True
 			self.sched.shutdown()
 			return(0)
 
@@ -221,5 +229,5 @@ class SchedulerIO:
 				else: self.sched.addLog('downloader unpaused')
 				return(0)
 
-		# Implement manual scene insertion=
+		# Implement manual scene insertion
 		return(1)

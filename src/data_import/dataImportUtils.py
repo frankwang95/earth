@@ -9,6 +9,7 @@ class DownloadStatus:
     def __init__(self, total=1):
         self.prog = 0
         self.tot = total
+        self.failures = 0
         self.complete = False
 
     def updateProg(self, change):
@@ -19,20 +20,21 @@ class DownloadStatus:
         self.tot = total
         return(0)
 
+    def failed(self):
+        self.failures += 1
+        self.prog = 0
+        return(0)
+
     def completed(self):
         self.complete = True
         return(0)
 
 
 
-class ExtractionStatus:
+class PreProcStatus:
     def __init__(self):
         self.prog = 0
-        self.tot = 1
-    
-    def updateTot(self, total):
-        self.tot = total
-        return(0)
+        self.tot = 15
 
     def updateProg(self, change=1):
         self.prog += change
