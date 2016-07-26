@@ -192,7 +192,7 @@ class Scheduler:
 					self.addLog('scene {0} download failure timeout, aborting'.format(x.id))
 					del self.d_queue_man[0]
 
-			elif len(self.d_queue_auto) > 0 and not self.pausedT:
+			elif len(self.d_queue_auto) > 0 and not self.pausedT and not self.pausedDownloadT:
 				x = self.d_queue_auto[0]
 				x.updateStatus(DownloadStatus())
 				self.addLog('downloading scene: {0}'.format(x.id))
@@ -227,7 +227,7 @@ class Scheduler:
 				self.addLog('processing scene: {0}'.format(x.id))
 				x.updateStatus(PreProcStatus())
 				message = self.p.preproc(x.id, x.status)
-				if message == 0: self.addLog('scene {0} processing'.format(x.id))
+				if message == 0: self.addLog('scene {0} processed'.format(x.id))
 				else: self.addLog('scene {0} processing failed'.format(x.id))
 				del self.p_queue[0]
 			time.sleep(5)
@@ -237,6 +237,7 @@ class Scheduler:
 			os.remove(generateFilePathStr(task.id, 'raw', 'tar'))
 			os.remove(generateFilePathStr(task.id, 'raw'))
 
+		self.p.shutdown()
 		self.shutdownExtractT = True
 		return(0)
 

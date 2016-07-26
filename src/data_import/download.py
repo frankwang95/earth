@@ -70,7 +70,7 @@ class Downloader(object):
 
 		self.status.updateTotal(get_remote_file_size(url))
 
-		r = requests.get(url, stream = True)
+		r = requests.get(url, stream = True, timeout=5)
 		f = open(generateFilePathStr(sceneid, 'raw', 'tar'), 'wb')
 		for chunk in r.iter_content(chunk_size=2048): 
 			if chunk:

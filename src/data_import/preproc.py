@@ -113,7 +113,6 @@ class Preprocessor(object):
 				self.status
 			)
 			os.remove(generateFilePathStr(sceneid, 'raw', 'tar'))
-			metadataInsert(sceneid, self.db, self.cur)
 
 
 		except:
@@ -129,6 +128,15 @@ class Preprocessor(object):
 		self.status.updateProg()
 		preProcObj.writePanVis_MAIN()
 		self.status.updateProg()
+
+		metadataInsert(sceneid, self.db, self.cur)
 		
 		preProcObj.close()
+		return(0)
+
+
+	def shutdown(self):
+		self.h5F.close()
+		self.cur.close()
+		self.db.close()
 		return(0)

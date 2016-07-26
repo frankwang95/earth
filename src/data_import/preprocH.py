@@ -56,7 +56,6 @@ class LandsatPreProcess:
 		
 		self.images = {}
 		for b in bands:
-			check_create_folder(generateFilePathStr(self.id, 'preproc', b))
 			self.images[b] = np.array(Image.open(generateFilePathStr(sceneid, 'raw', b)), dtype = 'uint16')
 
 		self.visibleOrig = False
@@ -97,7 +96,7 @@ class LandsatPreProcess:
 	def writeHDF_MAIN(self): # code 0
 		self.h5File.create_group(self.id)
 		for b in bands:
-			self.h5File[generateFilePathStr(self.id, 'database', b)] = self.images[b]
+			self.h5File.create_dataset(generateFilePathStr(self.id, 'database', b), data=self.images[b], chunks=True)
 		return(0)
 
 

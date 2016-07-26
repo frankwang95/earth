@@ -215,7 +215,7 @@ class SchedulerIO:
 				else: self.sched.addLog('scheduler unpaused')
 				return(0)
 
-			if cmdspl[1] == 'extract':
+			if cmdspl[1] == 'preprocess':
 				self.sched.pausedExtractT = not self.sched.pausedExtractT
 				if self.sched.pausedExtractT:
 					self.sched.addLog('extractor paused')
