@@ -71,3 +71,15 @@ The Download library defines the `Download` class and pertinant functions.
 
 
 ## The Extraction Library
+
+
+## Bugs
+- Segfault 11 on line 208 of cPreProcPipe.c
+- api.developmentseed API down
+
+## Todo
+- Check / clean SQL implementation
+- Check / clean search methods
+- Expand preprocessing options
+- Add manual insertion of images - implement API
+- More window flexible interface

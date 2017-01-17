@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "cPreProcPipe.h"
 
 
@@ -202,37 +203,54 @@ void cAdjustLevels (uint16_t* inArr, int n, int m) {
 				work = inArr[indexer(i, j, k, n, m)];
 				if (work > 0 && work < min)
 					min = work;
-				if (work > max && ((work - max) < 50 || work < 30000))
+
+				if (work > max && work < 60000) {
 					max = work;
+					printf("%d\n", work);
+				}
 			}
 		}
 	}
-
+/*
 	for (i = 0; i < n; ++i) {
 		for (j = 0; j < m; ++j) {
 			if (inArr[indexer(i, j, 0, n, m)] != 0)
 				inArr[indexer(i, j, 0, n, m)] = (uint16_t) (((double) (inArr[indexer(i, j, 0, n, m)] - min) / (double) (max - min)) * 65535.0);
 			if (inArr[indexer(i, j, 1, n, m)] != 0)
 				inArr[indexer(i, j, 1, n, m)] = (uint16_t) (((double) (inArr[indexer(i, j, 1, n, m)] - min) / (double) (max - min)) * 65535.0);
-			if (inArr[indexer(i, j, 1, n, m)] != 0)
+			if (inArr[indexer(i, j, 2, n, m)] != 0)
 				inArr[indexer(i, j, 2, n, m)] = (uint16_t) (((double) (inArr[indexer(i, j, 2, n, m)] - min) / (double) (max - min)) * 65535.0);
 		}
-	}
+	}*/
 }
 
 
 void c16to8 (uint16_t* inArr, uint8_t* outArr, int n, int m) {
 	int i, j;
-	double rf, gf, bf;
+	double f;
 	for (i = 0; i < n; ++i) {
 		for (j = 0; j < m; ++j) {
-			rf  = (double) inArr[indexer(i, j, 0, n, m)] / 65535.0;
-			gf  = (double) inArr[indexer(i, j, 1, n, m)] / 65535.0;
-			bf  = (double) inArr[indexer(i, j, 2, n, m)] / 65535.0;
+			f  = (double) inArr[indexer2D(i, j, n, m)] / 65535.0;
+			outArr[indexer2D(i, j, n, m)] = (uint8_t) (f * 255.0);
+		}
+	}
+}
 
-			outArr[indexer(i, j, 0, n, m)] = (uint8_t) (rf * 255.0);
-			outArr[indexer(i, j, 1, n, m)] = (uint8_t) (gf * 255.0);
-			outArr[indexer(i, j, 2, n, m)] = (uint8_t) (bf * 255.0);
+
+/* need out array to have half dimension of in array and inArr to have even dim*/
+void cDownsize (uint16_t* inArr, uint8_t* outArr, int n, int m) {
+	int i, j;
+	uint16_t p1, p2, p3, p4, f;
+
+	for (i = 0; i < n / 2; ++i) {
+		for (j = 0; j < n / 2; ++j) {
+			p1 = inArr[indexer2D(2 * i, 2 * j, n, m)];
+			p2 = inArr[indexer2D(2 * i + 1, 2 * j, n, m)];
+			p3 = inArr[indexer2D(2 * i, 2 * j + 1, n, m)];
+			p4 = inArr[indexer2D(2 * i + 1, 2 * j + 1, n, m)];
+			f = (p1 + p2 + p3 + p4) / 4;
+
+			outArr[indexer2D(i, j, n / 2, m / 2)] = f;
 		}
 	}
 }

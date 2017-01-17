@@ -45,7 +45,7 @@ def metadataInsert(sceneid, db, cur):
 	earth_sun_dist = splitTags['EARTH_SUN_DISTANCE']
 	orientation = splitTags['ORIENTATION']
 
-	enterCmd = u'''INSERT INTO imageindex VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23} , {24});'''.format(
+	enterCmd = u'''INSERT INTO imageindex VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23});'''.format(
 		sceneid,
 		time,
 		ul_lat,
@@ -69,16 +69,12 @@ def metadataInsert(sceneid, db, cur):
 		sun_azimuth,
 		sun_elev,
 		earth_sun_dist,
-		orientation,
-		0
+		orientation
 	)
 
-	try:
-		cur.execute(enterCmd)
-		db.commit()
-		return(0)
-	except:
-		return(ExceptionObj('entry already exists in mysql database'))
+	cur.execute(enterCmd)
+	db.commit()
+	return(0)
 
 
 
@@ -121,15 +117,15 @@ class Preprocessor(object):
 			os.rmdir(generateFilePathStr(sceneid, 'raw'))
 			return(ExceptionObj('extraction failed'))
 
-		# preproc methods
+		# preprocess
 		preProcObj = LandsatPreProcess(sceneid, self.h5F)
-
+		preProcObj.compute()
 		preProcObj.writeHDF_MAIN()
 		self.status.updateProg()
-		preProcObj.writePanVis_MAIN()
+		preProcObj.writeVis_MAIN()
 		self.status.updateProg()
 
-		metadataInsert(sceneid, self.db, self.cur)
+		print metadataInsert(sceneid, self.db, self.cur)
 		
 		preProcObj.close()
 		return(0)

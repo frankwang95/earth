@@ -1,5 +1,6 @@
 import threading
 import random
+import shutil
 import datetime
 import time
 import sys
@@ -12,6 +13,7 @@ import search
 import download
 import preproc
 from dataImportUtils import(
+	check_scene_exists,
 	DownloadStatus,
 	PreProcStatus
 )
@@ -95,53 +97,16 @@ class Scheduler:
 		nDays = monthrange(yr, mon)[1]
 
 		results1 = self.s.search(
-			start_date = '{0}-{1}-01'.format(yr, mon),
-			end_date = '{0}-{1}-06'.format(yr, mon, nDays),
-			cloud_max = CLOUD_MAX,
-			limit = 4000
-		)
-		results2 = self.s.search(
-			start_date = '{0}-{1}-07'.format(yr, mon),
-			end_date = '{0}-{1}-12'.format(yr, mon, nDays),
-			cloud_max = CLOUD_MAX,
-			limit = 4000
-		)
-		results3 = self.s.search(
-			start_date = '{0}-{1}-13'.format(yr, mon),
-			end_date = '{0}-{1}-18'.format(yr, mon, nDays),
-			cloud_max = CLOUD_MAX,
-			limit = 4000
-		)
-		results4 = self.s.search(
-			start_date = '{0}-{1}-19'.format(yr, mon),
-			end_date = '{0}-{1}-24'.format(yr, mon, nDays),
-			cloud_max = CLOUD_MAX,
-			limit = 4000
-		)
-		results5 = self.s.search(
-			start_date = '{0}-{1}-25'.format(yr, mon),
-			end_date = '{0}-{1}-{2}'.format(yr, mon, nDays),
+			start_date = '2017-01-01'.format(yr, mon),
+			end_date = '2020-01-31'.format(yr, mon),
 			cloud_max = CLOUD_MAX,
 			limit = 4000
 		)
 
-		if (
-			results1['status'] == u'SUCCESS' and
-			results2['status'] == u'SUCCESS' and
-			results3['status'] == u'SUCCESS' and
-			results4['status'] == u'SUCCESS' and
-			results5['status'] == u'SUCCESS'
-		):
-			if (
-				results1['total_returned'] == 4000 or
-				results2['total_returned'] == 4000 or
-				results3['total_returned'] == 4000 or 
-				results4['total_returned'] == 4000 or 
-				results5['total_returned'] == 4000
-			):
+		if (results1['status'] == u'SUCCESS'):
+			if (results1['total_returned'] == 4000):
 				self.addLog('WARNING: search result overflow')
-			return(results1['results'] + results2['results'] + results3['results'])
-
+			return(results1['results'])
 		return(1)
 
 
@@ -162,57 +127,48 @@ class Scheduler:
 					random.shuffle(searchResults)
 					self.d_queue_auto = [Task(i) for i in searchResults if not checkScene(i, self.db, self.cur)]
 					self.addLog('queue updated with {0} entries'.format(len(searchResults)))
-				except:
-					self.addLog('queue update failed')
+				except Exception as e:
+					self.addLog('queue update failed: {0}'.format(e))
 			time.sleep(30)
 		return(0)
+
+
+	def downloadHelper(self, x):
+		if check_scene_exists(x.id, self.db, self.cur): return(0)
+
+		x.updateStatus(DownloadStatus())
+		self.addLog('downloading scene: {0}'.format(x.id))
+
+		n = DOWNLOAD_TIMEOUT
+		while n > 0 and not self.pausedDownloadT:
+			try:
+				code = self.d.download(x.id, x.status)
+				if code != 0: raise Exception
+				self.p_queue.append(x)
+				self.addLog('scene {0} downloaded, added to processing queue'.format(x.id))
+				x.status = 'PENDING'
+				break
+			except:
+				self.addLog('scene {0} download failure, attempts remaining: ({1}/{2})'.format(x.id, n, DOWNLOAD_TIMEOUT))
+				shutil.rmtree(generateFilePathStr(x.id, 'raw'))
+				n -= 1
+				time.sleep(2)
+
+		if n == 0:
+			self.addLog('scene {0} download failure timeout, aborting'.format(x.id))
 
 
 	def downloadHandler(self):
 		while not self.shutdownT:
 			if len(self.d_queue_man) > 0 and not self.pausedT and not self.pausedDownloadT:
 				x = self.d_queue_man[0]
-				x.updateStatus(DownloadStatus())
-				self.addLog('downloading scene: {0}'.format(x.id))
-
-				n = DOWNLOAD_TIMEOUT
-				while n > 0 and not self.pausedDownloadT:
-					try:
-						self.d.download(x.id, x.status)
-						self.p_queue.append(x)
-						self.addLog('scene {0} downloaded, added to processing queue'.format(x.id))
-						x.status = 'PENDING'
-						del self.d_queue_man[0]
-						break
-					except:
-						x.status.failed()
-						self.addLog('scene {0} download failure, attempts remaining: ({1}/{2})'.format(x.id, n, DOWNLOAD_TIMEOUT))
-						n -= 1
-				if n == 0:
-					self.addLog('scene {0} download failure timeout, aborting'.format(x.id))
-					del self.d_queue_man[0]
+				self.downloadHelper(x)
+				del self.d_queue_man[0]
 
 			elif len(self.d_queue_auto) > 0 and not self.pausedT and not self.pausedDownloadT:
 				x = self.d_queue_auto[0]
-				x.updateStatus(DownloadStatus())
-				self.addLog('downloading scene: {0}'.format(x.id))
-
-				n = DOWNLOAD_TIMEOUT
-				while n > 0 and not self.pausedDownloadT:
-					try:
-						self.d.download(x.id, x.status)
-						self.p_queue.append(x)
-						self.addLog('scene {0} downloaded, added to processing queue'.format(x.id))
-						x.status = 'PENDING'
-						del self.d_queue_auto[0]
-						break
-					except:
-						x.status.failed()
-						self.addLog('scene {0} download failure, attempts remaining: ({1}/{2})'.format(x.id, n, DOWNLOAD_TIMEOUT))
-						n -= 1
-				if n == 0:
-					self.addLog('scene {0} download failure timeout, aborting'.format(x.id))
-					del self.d_queue_auto[0]
+				self.downloadHelper(x)
+				del self.d_queue_auto[0]
 
 			time.sleep(5)
 

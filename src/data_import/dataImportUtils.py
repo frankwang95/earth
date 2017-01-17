@@ -1,6 +1,7 @@
+import shutil
 import re
 import requests
-import settings
+import MySQLdb as sql
 
 
 
@@ -9,7 +10,6 @@ class DownloadStatus:
     def __init__(self, total=1):
         self.prog = 0
         self.tot = total
-        self.failures = 0
         self.complete = False
 
     def updateProg(self, change):
@@ -18,11 +18,6 @@ class DownloadStatus:
 
     def updateTotal(self, total):
         self.tot = total
-        return(0)
-
-    def failed(self):
-        self.failures += 1
-        self.prog = 0
         return(0)
 
     def completed(self):
@@ -39,6 +34,14 @@ class PreProcStatus:
     def updateProg(self, change=1):
         self.prog += change
         return(0)
+
+
+
+############################### SQL #############################
+def check_scene_exists(sceneid, db, cur):
+    enterCmd = 'SELECT lid FROM imageindex WHERE lid="{0}"'.format(sceneid)
+    code = cur.execute(enterCmd)
+    return(code != 0)
 
 
 

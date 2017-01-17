@@ -195,7 +195,7 @@ class SchedulerIO:
 			elif task.status.prog == 13:
 				self.mainWin.addstr(y + 2, x, 'writing to HDF5 group', curses.color_pair(4))
 			elif task.status.prog > 13:
-				self.mainWin.addstr(y + 2, x, 'writing pansharpened visible imagery', curses.color_pair(4))
+				self.mainWin.addstr(y + 2, x, 'writing visible imagery', curses.color_pair(4))
 			self.mainWin.addstr(y + 3, x, progBar(prog, 75))
 		return(0)
 

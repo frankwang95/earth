@@ -21,7 +21,8 @@ from pyPreProcPipe import (
 	pyBilinearInter,
 	pyLuminosityBlend,
 	pyAdjustLevels,
-	py16to8
+	py16to8,
+	pyDownsize
 )
 
 
@@ -57,23 +58,73 @@ class LandsatPreProcess:
 		self.images = {}
 		for b in bands:
 			self.images[b] = np.array(Image.open(generateFilePathStr(sceneid, 'raw', b)), dtype = 'uint16')
-
-		self.visibleOrig = False
-		self.visibleInter = False
-
+		self.visible = False
 		self.h5File = h5F
 
 
 	def generateVisible(self):
-		if type(self.visibleOrig) == type(True):
-			self.visibleOrig = np.dstack((
+		if type(self.visible) == type(True):
+			self.visible = np.dstack((
 				self.images['B4'],
 				self.images['B3'],
 				self.images['B2']
-			))
+			))	
+			#pyAdjustLevels(self.visible)
 		return(0)
 
 
+	def generateDownsize(self):
+		if self.images['B1'].shape[0] % 2 != 0:
+			for b in bands:
+				self.images[b] = self.images[b][:-1, :]
+		if self.images['B1'].shape[1] % 2 != 0:
+			for b in bands:
+				self.images[b] = self.images[b][:, :-1]
+
+		n = self.images['B1'].shape[0] / 2
+		m = self.images['B1'].shape[1] / 2
+
+		for b in bands:
+			outRes = np.zeros((n, m), dtype='uint16')
+			pyDownsize(self.images[b], outRes)
+			self.images[b] = outRes
+
+			outBit = outRes = np.zeros((n, m), dtype='uint8')
+			py16to8(self.images[b], outBit)
+			self.images[b] = outBit
+
+
+	def compute(self):
+		self.generateDownsize()
+		self.generateVisible()
+
+
+	def writeHDF_MAIN(self): # code 0
+		self.h5File.create_group(self.id)
+		for b in bands:
+			self.h5File.create_dataset(generateFilePathStr(self.id, 'database', b), data=self.images[b], chunks=True)
+		return(0)
+
+
+	def writeVis_MAIN(self): # code 1
+		writeImg(self.visible, generateFilePathStr(self.id, 'preproc', 'visible'))
+		return(0)
+
+
+	def close(self):
+		del self.images
+		del self.visible
+		return(0)
+
+
+	# CURRENTLY OUT OF PRODUCTION
+	def writePanVis_MAIN(self): # code 1
+		self.generatePanVisible()
+		writeImg(self.visibleInter, generateFilePathStr(self.id, 'preproc', 'visible'))
+		return(0)
+
+
+	# CURRENTLY OUT OF PRODUCTION
 	def generatePanVisible(self):
 		if type(self.visibleInter) == type(True):
 			self.generateVisible()
@@ -90,24 +141,4 @@ class LandsatPreProcess:
 
 			# adjusts levels
 			pyAdjustLevels(self.visibleInter)
-		return(0) 
-
-
-	def writeHDF_MAIN(self): # code 0
-		self.h5File.create_group(self.id)
-		for b in bands:
-			self.h5File.create_dataset(generateFilePathStr(self.id, 'database', b), data=self.images[b], chunks=True)
-		return(0)
-
-
-	def writePanVis_MAIN(self): # code 1
-		self.generatePanVisible()
-		writeImg(self.visibleInter, generateFilePathStr(self.id, 'preproc', 'visible'))
-		return(0)
-
-	
-	def close(self):
-		del self.images
-		del self.visibleOrig
-		del self.visibleInter
 		return(0)

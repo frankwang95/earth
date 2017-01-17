@@ -19,7 +19,7 @@ cdef extern from "cPreProcPipe.h":
 
 
 cdef extern from "cPreProcPipe.h":
-	void cWrite3x3 (np.uint8_t* inArr, int n, int m, char* path)
+	void cDownsize (np.uint16_t* inArr, np.uint16_t*, int n, int m)
 
 
 def pyBilinearInter(inArr, outArr):
@@ -52,6 +52,15 @@ def py16to8 (inArr, outArr):
 	return c16to8 (
 		<np.uint16_t*> np.PyArray_DATA(inArr),
 		<np.uint8_t*> np.PyArray_DATA(outArr),
+		inArr.shape[0],
+		inArr.shape[1]
+	)
+
+
+def pyDownsize (inArr, outArr):
+	return cDownsize (
+		<np.uint16_t*> np.PyArray_DATA(inArr),
+		<np.uint16_t*> np.PyArray_DATA(outArr),
 		inArr.shape[0],
 		inArr.shape[1]
 	)
