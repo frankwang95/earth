@@ -3,8 +3,10 @@ import re
 import requests
 import MySQLdb as sql
 import random
+import h5py
 import time
 import sys
+import os
 
 sys.path.insert(0,'..')
 from datetime import datetime
@@ -56,8 +58,9 @@ def check_scene_exists(sceneid, db, cur):
 
 
 def remove_scene(sceneid, db, cur):
-    enterCmd = 'DELETE FROM imageindex WHERE lid="{0};"'.format(sceneid)
+    enterCmd = 'DELETE FROM imageindex WHERE lid="{0}";'.format(sceneid)
     cur.execute(enterCmd)
+    db.commit()
     return(0)
 
 
@@ -108,6 +111,46 @@ def metadataInsert(sceneid, db, cur):
 
     cur.execute(enterCmd)
     db.commit()
+    return(0)
+
+
+
+############################### CLEANUP ###############################
+def purge_scene(sceneid, db, cur, h5F):
+    try:
+        for i in os.listdir(generateFilePathStr(sceneid, 'raw')):
+            os.remove(generateFilePathStr(sceneid, 'raw', i))
+    except: pass
+
+    try: os.rmdir(generateFilePathStr(sceneid, 'raw'))
+    except: pass
+    
+    try: os.remove(generateFilePathStr(sceneid, 'preproc', 'visible'))
+    except: pass
+
+    try: remove_scene(sceneid, db, cur)
+    except: pass
+
+    try: del h5F[sceneid]
+    except: pass
+
+    return(0)
+
+
+def cleanup(db, cur, h5F):
+    # get image lists
+    sqlcmd = 'SELECT lid FROM imageindex;'
+    cur.execute(sqlcmd)
+    sql_lid = cur.fetchall()
+    sql_lid = [i[0] for i in sql_lid]
+    raw_lid = [i for i in os.listdir(generateFilePathStr(type='raw')) if i[0] != '.']
+    vis_lid = [i[:-6] for i in os.listdir(generateFilePathStr(type='preproc', file='visible')) if i[0] != '.']
+    hdf_lid = h5F.keys()
+    lids = list(set().union(sql_lid, raw_lid, vis_lid, hdf_lid))
+
+    for l in lids:
+        if l not in vis_lid or l not in hdf_lid or l not in raw_lid or l not in sql_lid: purge_scene(l, db, cur, h5F)
+
     return(0)
 
 

@@ -29,8 +29,6 @@ def progBar(perc, l):
 class SchedulerIO:
 	def __init__(self, sched):
 		self.sched = sched
-		self.shutdownT = False
-
 		self.stdscr = curses.initscr()
 		self.stdscr.keypad(1)
 		self.stdscr.nodelay(1)
@@ -75,7 +73,7 @@ class SchedulerIO:
 
 		self.stdscr.refresh()
 
-		while not self.sched.shutdownT or threading.active_count() > 1:
+		while not self.sched.shutdownSearchT or not self.sched.shutdownDownloadT or not self.sched.shutdownExtractT:
 			self.mainWin.erase()
 
 			c = self.stdscr.getch()
@@ -213,7 +211,7 @@ class SchedulerIO:
 		cmdspl = cmd.split()
 		if cmdspl[0] == 'shutdown':
 			self.currTab = 0
-			self.sched.shutdown()
+			threading.Thread(target=self.sched.shutdown).start()
 			return(0)
 
 		if cmdspl[0] == 'pause':

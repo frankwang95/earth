@@ -15,6 +15,7 @@ from dataImportUtils import(
 	check_scene_exists,
 	DownloadStatus,
 	PreProcStatus,
+	cleanup,
 	random_date
 )
 from settings import(
@@ -28,12 +29,6 @@ from utils import (
 	check_create_folder,
 	generateFilePathStr
 )
-
-
-
-def checkScene(sceneid, db, cur):
-	cur.execute("SELECT EXISTS (SELECT 1/0 FROM imageindex WHERE lid='{0}');".format(sceneid))
-	return(cur.fetchall()[0][0] == 1)
 
 
 
@@ -120,6 +115,7 @@ class Scheduler:
 						self.d_queue_auto.append(Task(searchResult))
 						self.addLog('queue updated with scene {0}'.format(searchResult))
 				except Exception as e:
+					print e
 					self.addLog('queue update failed: {0}'.format(e))
 			time.sleep(30)
 		self.shutdownSearchT = True
@@ -127,7 +123,7 @@ class Scheduler:
 
 
 	def insertJob(self, sceneid):
-		if not checkScene(sceneid, self.db, self.cur):
+		if not check_scene_exists(sceneid, self.db, self.cur):
 			self.d_queue_man.append(Task(sceneid))
 			self.addLog('scene {0} inserted into manual queue'.format(sceneid))
 			return(0)
@@ -199,12 +195,6 @@ class Scheduler:
 				del self.p_queue[0]
 			time.sleep(5)
 
-		# Deletes unprocessed downloads
-		for task in self.p_queue:
-			os.remove(generateFilePathStr(task.id, 'raw', 'tar'))
-			os.remove(generateFilePathStr(task.id, 'raw'))
-
-		self.p.shutdown()
 		self.shutdownExtractT = True
 		return(0)
 
@@ -218,6 +208,26 @@ class Scheduler:
 		self.addLog('shutting down scheduler...')
 		self.shutdownT = True
 		self.addLog('waiting for threads to complete tasks (this can take a while)...')
+
+		start = time.time()
+		while not self.shutdownSearchT or not self.shutdownExtractT or not self.shutdownDownloadT:
+			if time.time() - start > 1800:
+				self.addLog('WARNING: threads have failed to close, manually closing critical resources')
+				self.addLog('WARNING: wait for completion before termination - database may need cleanup after shutdown')
+				break
+			time.sleep(10)
+
+		# shutdown preproc
+		cleanup(self.p.db, self.p.cur, self.p.h5F)
+		self.p.h5F.close()
+		self.p.cur.close()
+		self.p.db.close()
+
+		# shutdown self
+		self.cur.close()
+		self.db.close()
+
+		self.addLog('resources closed')
 		return(0)
 
 

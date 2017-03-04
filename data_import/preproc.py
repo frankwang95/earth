@@ -5,7 +5,7 @@ import MySQLdb as sql
 import h5py
 
 sys.path.insert(0,'..')
-from dataImportUtils import PreProcStatus, remove_scene, metadataInsert
+from dataImportUtils import PreProcStatus, purge_scene, metadataInsert
 from utils import ExceptionObj, generateFilePathStr
 import settings
 from preprocH import *
@@ -54,33 +54,7 @@ class Preprocessor(object):
 			preProcObj.close()
 
 		except:
-			self.clean(sceneid)
+			self.purge_scene(sceneid, self.db, self.cur, self.h5F)
 			return(ExceptionObj('preprocing failed'))
 		
-		return(0)
-
-
-	def clean(self, sceneid):
-			try:
-				for i in os.listdir(generateFilePathStr(sceneid, 'raw')):
-					os.remove(generateFilePathStr(sceneid, 'raw', i))
-			except: pass
-
-			try: os.rmdir(generateFilePathStr(sceneid, 'raw'))
-			except: pass
-			
-			try: os.remove(generateFilePathStr(sceneid, 'preproc', 'visible'))
-			except: pass
-
-			try: remove_scene(sceneid, self.db, self.cur)
-			except: pass
-
-			try: del self.h5F[sceneid]
-			except: pass
-
-
-	def shutdown(self):
-		self.h5F.close()
-		self.cur.close()
-		self.db.close()
 		return(0)
