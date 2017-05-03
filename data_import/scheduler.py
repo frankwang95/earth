@@ -115,7 +115,6 @@ class Scheduler:
 						self.d_queue_auto.append(Task(searchResult))
 						self.addLog('queue updated with scene {0}'.format(searchResult))
 				except Exception as e:
-					print e
 					self.addLog('queue update failed: {0}'.format(e))
 			time.sleep(30)
 		self.shutdownSearchT = True
