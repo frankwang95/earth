@@ -4,7 +4,7 @@ import os
 
 ############################### DATA IMPORT SETTINGS #############################
 # Storage Location
-DATA_DIR = '/Volumes/243-Ida/earth-data'
+DATA_DIR = './data/'
 
 
 # Search Parameters
