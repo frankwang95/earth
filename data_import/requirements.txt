@@ -1,0 +1,5 @@
+MySQL-python
+h5py
+numpy
+requests
+cython
