@@ -4,7 +4,8 @@ import os
 
 ############################### DATA IMPORT SETTINGS #############################
 # Storage Location
-DATA_DIR = '/opt/earth_data/'
+# DATA_DIR = '/opt/earth_data/'
+DATA_DIR = '/Users/frankwang/projects/earth/data'
 
 
 # Search Parameters
