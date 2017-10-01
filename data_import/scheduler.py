@@ -49,9 +49,9 @@ class Scheduler:
 	def __init__(self):
 		#check-installation
 		check_create_folder(generateFilePathStr())
-		check_create_folder(generateFilePathStr(type = 'raw'))
-		check_create_folder(generateFilePathStr(type = 'preproc'))
-		check_create_folder(generateFilePathStr(type = 'preproc', file = 'visible'))
+		check_create_folder(generateFilePathStr(kind = 'raw'))
+		check_create_folder(generateFilePathStr(kind = 'preproc'))
+		check_create_folder(generateFilePathStr(kind = 'preproc', file = 'visible'))
 
 		#initialize
 		self.pausedT = False

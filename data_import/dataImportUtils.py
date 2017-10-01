@@ -143,8 +143,8 @@ def cleanup(db, cur, h5F):
     cur.execute(sqlcmd)
     sql_lid = cur.fetchall()
     sql_lid = [i[0] for i in sql_lid]
-    raw_lid = [i for i in os.listdir(generateFilePathStr(type='raw')) if i[0] != '.']
-    vis_lid = [i[:-6] for i in os.listdir(generateFilePathStr(type='preproc', file='visible')) if i[0] != '.']
+    raw_lid = [i for i in os.listdir(generateFilePathStr(kind='raw')) if i[0] != '.']
+    vis_lid = [i[:-6] for i in os.listdir(generateFilePathStr(kind='preproc', file='visible')) if i[0] != '.']
     hdf_lid = h5F.keys()
     lids = list(set().union(sql_lid, raw_lid, vis_lid, hdf_lid))
 

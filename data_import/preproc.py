@@ -25,7 +25,7 @@ class Preprocessor(object):
 		)
 		self.cur = self.db.cursor()
 
-		self.h5F = h5py.File(generateFilePathStr(type = 'database'), 'a')
+		self.h5F = h5py.File(generateFilePathStr(kind = 'database'), 'a')
 
 
 	def preproc(self, sceneid, status = None):
