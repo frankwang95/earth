@@ -182,7 +182,7 @@ class Scheduler:
 
 		start = time.time()
 		while not self.shutdownExtractT or not self.shutdownDownloadT:
-			if time.time() - start > 1800:
+			if time.time() - start > 300:
 				self.addLog('WARNING: threads have failed to close, manually closing critical resources')
 				self.addLog('WARNING: wait for completion before termination - database may need cleanup after shutdown')
 				break
