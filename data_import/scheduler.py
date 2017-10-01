@@ -8,7 +8,6 @@ from calendar import monthrange
 import MySQLdb as sql
 
 sys.path.insert(0,'..')
-import search
 import download
 import preproc
 from dataImportUtils import(
@@ -56,11 +55,9 @@ class Scheduler:
 
 		#initialize
 		self.pausedT = False
-		self.pausedSearchT = False
 		self.pausedDownloadT = False
 		self.pausedExtractT = False
 		self.shutdownT = False
-		self.shutdownSearchT = False
 		self.shutdownDownloadT = False
 		self.shutdownExtractT = False
 		self.log = []
@@ -73,7 +70,6 @@ class Scheduler:
 		)
 		self.cur = self.db.cursor()
 
-		self.s = search.Search()
 		self.d = download.Downloader()
 		self.p = preproc.Preprocessor()
 
@@ -82,43 +78,19 @@ class Scheduler:
 		self.p_queue = []
 
 		self.addLog('scheduler started')
-		threading.Thread(target = self.autoSched).start()
+		self.addScenes()
 		threading.Thread(target = self.downloadHandler).start()
 		threading.Thread(target = self.preprocHandler).start()
 		schedulerIO.SchedulerIO(self)
 
 
-	def getSearch(self, start, stop):
-		results1 = self.s.search(
-			start_date=start, end_date=stop,
-			cloud_max = CLOUD_MAX,
-			limit = 2000
-		)
-
-		if (results1['status'] == u'SUCCESS'):
-			if (results1['total_returned'] == 2000):
-				self.addLog('WARNING: search result overflow')
-			return(results1['results'])
-		return(1)
-
-
-	def autoSched(self):
-		month = None
-		year = None
-		while not self.shutdownT:
-			if not self.pausedT and not self.pausedSearchT and len(self.d_queue_auto) < 20:
-				try:
-					datestr = random_date()
-					searchResult = [str(i['sceneID']) for i in self.getSearch(datestr, datestr)]
-					if len(searchResult) > 0:
-						searchResult = random.choice(searchResult)
-						self.d_queue_auto.append(Task(searchResult))
-						self.addLog('queue updated with scene {0}'.format(searchResult))
-				except Exception as e:
-					self.addLog('queue update failed: {0}'.format(e))
-			time.sleep(30)
-		self.shutdownSearchT = True
-		return(0)
+	def addScenes(self):
+		self.addLog('adding available scenes to queue')
+		with open('available_scenes', 'r') as f:
+			available_scenes = f.readlines()
+		random.shuffle(available_scenes)
+		self.d_queue_auto = [Task(scene[:-1]) for scene in available_scenes]
+		self.addLog('queue updated with all available scenes')
 
 
 	def insertJob(self, sceneid):
@@ -147,8 +119,8 @@ class Scheduler:
 				self.addLog('scene {0} downloaded, added to processing queue'.format(x.id))
 				x.status = 'PENDING'
 				break
-			except:
-				self.addLog('scene {0} download failure, attempts remaining: ({1}/{2})'.format(x.id, n, DOWNLOAD_TIMEOUT))
+			except Exception:
+				#self.addLog('scene {0} download failure, attempts remaining: ({1}/{2})'.format(x.id, n, DOWNLOAD_TIMEOUT))
 				x.status.reset()
 				shutil.rmtree(generateFilePathStr(x.id, 'raw'))
 				n -= 1
@@ -209,7 +181,7 @@ class Scheduler:
 		self.addLog('waiting for threads to complete tasks (this can take a while)...')
 
 		start = time.time()
-		while not self.shutdownSearchT or not self.shutdownExtractT or not self.shutdownDownloadT:
+		while not self.shutdownExtractT or not self.shutdownDownloadT:
 			if time.time() - start > 1800:
 				self.addLog('WARNING: threads have failed to close, manually closing critical resources')
 				self.addLog('WARNING: wait for completion before termination - database may need cleanup after shutdown')

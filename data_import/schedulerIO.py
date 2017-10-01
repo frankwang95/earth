@@ -73,7 +73,7 @@ class SchedulerIO:
 
 		self.stdscr.refresh()
 
-		while not self.sched.shutdownSearchT or not self.sched.shutdownDownloadT or not self.sched.shutdownExtractT:
+		while not self.sched.shutdownDownloadT or not self.sched.shutdownExtractT:
 			self.mainWin.erase()
 
 			c = self.stdscr.getch()
@@ -131,15 +131,6 @@ class SchedulerIO:
 			self.mainWin.addstr(2, 20, 'paused', curses.color_pair(3))
 		else:
 			self.mainWin.addstr(2, 20, 'running', curses.color_pair(4))
-
-		self.mainWin.addstr(3, 4, 'search ', curses.A_BOLD)
-		self.mainWin.addstr(3, 11, 'is ')
-		if self.sched.shutdownSearchT:
-			self.mainWin.addstr(3, 14, 'shutdown', curses.color_pair(5))
-		elif self.sched.pausedSearchT or self.sched.pausedT:
-			self.mainWin.addstr(3, 14, 'paused', curses.color_pair(3))
-		else:
-			self.mainWin.addstr(3, 14, 'running', curses.color_pair(4))
 
 		self.mainWin.addstr(5, 0, 'SCHEDULER STATISTICS', curses.A_BOLD | curses.A_UNDERLINE)
 
@@ -234,13 +225,6 @@ class SchedulerIO:
 				if self.sched.pausedDownloadT:
 					self.sched.addLog('downloader paused')
 				else: self.sched.addLog('downloader unpaused')
-				return(0)
-
-			if cmdspl[1] == 'search':
-				self.sched.pausedSearchT = not self.sched.pausedSearchT
-				if self.sched.pausedSearchT:
-					self.sched.addLog('auto scheduler paused')
-				else: self.sched.addLog('auto scheduler unpaused')
 				return(0)
 
 		if cmdspl[0] == 'insert':
