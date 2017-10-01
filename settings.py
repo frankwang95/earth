@@ -4,7 +4,7 @@ import os
 
 ############################### DATA IMPORT SETTINGS #############################
 # Storage Location
-DATA_DIR = './data/'
+DATA_DIR = '/opt/earth/data/'
 
 
 # Search Parameters

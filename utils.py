@@ -13,16 +13,14 @@ class ExceptionObj:
 
 
 ############################### FILE PATH TOOLS #############################
-def generateFilePathStr(sceneid = '', type = '', file = ''):
+def generateFilePathStr(sceneid = '', kind = '', file = ''):
 	# without other arguments, returns hdf5 file of the main image catalog
 	# with arguments, gives the path in the hdf5 file for the given scene and band
-	if type == 'database':
-		if sceneid == '': return(settings.DATA_DIR + '/preproc/database.hdf5f')
-		else: file = '/' + sceneid + '/' + file
-		return(file)
-		
+	if kind == 'database':
+		if sceneid == '': return(os.path.join(settings.DATA_DIR, 'preproc/database.hdf5f'))
+		else: return(ox.path.join(sceneid, file))
 
-	if type == 'raw':
+	if kind == 'raw':
 		if file == 'metadata': file = sceneid + '_MTL.txt'
 		elif file == 'tar': file = sceneid
 		elif file == 'B1': file = sceneid + '_B1.TIF'
@@ -37,21 +35,13 @@ def generateFilePathStr(sceneid = '', type = '', file = ''):
 		elif file == 'B10': file = sceneid + '_B10.TIF'
 		elif file == 'B11': file = sceneid + '_B11.TIF'
 		elif file == 'BQA': file = sceneid + '_BQA.TIF'
-		
-		path = settings.DATA_DIR + '/raw/{0}/'.format(sceneid) + file
-		return(path)
+		return os.path.join(settings.DATA_DIR, 'raw/{0}/'.format(sceneid), file)
 
-
-	if type == 'preproc':
-		if file == 'visible': file += '/'
-		if sceneid != '':
-			file += sceneid + '_V.TIF'
-		
-		path = settings.DATA_DIR + '/preproc/' + file
-		return(path)
+	if kind == 'preproc':
+		if file == 'visible': sceneid += '_V.TIF'
+		return os.path.join(settings.DATA_DIR, kind, file, sceneid)
 		
 	return(settings.DATA_DIR)
-
 
 
 def check_create_folder(folder_path):

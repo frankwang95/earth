@@ -54,7 +54,7 @@ class Preprocessor(object):
 			preProcObj.close()
 
 		except:
-			self.purge_scene(sceneid, self.db, self.cur, self.h5F)
+			purge_scene(sceneid, self.db, self.cur, self.h5F)
 			return(ExceptionObj('preprocing failed'))
 		
 		return(0)
