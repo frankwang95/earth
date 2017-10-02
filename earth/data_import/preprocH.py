@@ -14,7 +14,7 @@ from earth.utils import (
 	check_create_folder
 )
 
-from earth.data_import.cython.pyPreProcPipe import (
+from earth.data_import.cython import (
 	pyBilinearInter,
 	pyLuminosityBlend,
 	pyAdjustLevels,

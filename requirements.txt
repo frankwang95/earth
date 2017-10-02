@@ -1,0 +1,7 @@
+MySQL-python
+h5py
+numpy
+requests
+cython
+scipy
+pillow

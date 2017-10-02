@@ -20,7 +20,9 @@ setup(
 	author_email='fkwang@uchicago.edu',
 	packages=find_packages(),
 	ext_modules=exts,
+	include_package_data=True,
 	install_requires=[
+		'setuptools-git',
 		'MySQL-python',
 		'h5py',
 		'numpy',

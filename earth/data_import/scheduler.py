@@ -3,6 +3,7 @@ import random
 import shutil
 import time
 import os
+import sys
 from calendar import monthrange
 import MySQLdb as sql
 
@@ -78,6 +79,7 @@ class Scheduler:
 
 
 	def addScenes(self):
+		print sys.prefix
 		self.addLog('adding available scenes to queue')
 		with open('available_scenes', 'r') as f:
 			available_scenes = f.readlines()
