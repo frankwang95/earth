@@ -51,7 +51,7 @@ class Preprocessor(object):
 			metadataInsert(sceneid, self.db, self.cur)
 			preProcObj.close()
 
-		except:
+		except Exception as e:
 			purge_scene(sceneid, self.db, self.cur, self.h5F)
 			return(ExceptionObj('preprocing failed'))
 		

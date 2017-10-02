@@ -18,7 +18,7 @@ def generateFilePathStr(sceneid = '', kind = '', file = ''):
 	# with arguments, gives the path in the hdf5 file for the given scene and band
 	if kind == 'database':
 		if sceneid == '': return(os.path.join(settings.DATA_DIR, 'preproc/database.hdf5f'))
-		else: return(ox.path.join(sceneid, file))
+		else: return(os.path.join(sceneid, file))
 
 	if kind == 'raw':
 		if file == 'metadata': file = sceneid + '_MTL.txt'
