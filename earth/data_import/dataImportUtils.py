@@ -11,7 +11,6 @@ from datetime import datetime
 from earth.utils import generateFilePathStr, ExceptionObj
 
 
-
 ############################### STATUS OBJECT #############################
 class DownloadStatus:
     def __init__(self, total=1):
@@ -36,7 +35,6 @@ class DownloadStatus:
         return(0)
 
 
-
 class PreProcStatus:
     def __init__(self):
         self.prog = 0
@@ -45,7 +43,6 @@ class PreProcStatus:
     def updateProg(self, change=1):
         self.prog += change
         return(0)
-
 
 
 ############################### SQL #############################
@@ -112,7 +109,6 @@ def metadataInsert(sceneid, db, cur):
     return(0)
 
 
-
 ############################### CLEANUP ###############################
 def purge_scene(sceneid, db, cur, h5F):
     try:
@@ -122,7 +118,7 @@ def purge_scene(sceneid, db, cur, h5F):
 
     try: os.rmdir(generateFilePathStr(sceneid, 'raw'))
     except: pass
-    
+
     try: os.remove(generateFilePathStr(sceneid, 'preproc', 'visible'))
     except: pass
 
@@ -148,9 +144,7 @@ def cleanup(db, cur, h5F):
 
     for l in lids:
         if l not in vis_lid or l not in hdf_lid or l not in raw_lid or l not in sql_lid: purge_scene(l, db, cur, h5F)
-
     return(0)
-
 
 
 ############################### MISC #############################

@@ -24,7 +24,6 @@ from earth.utils import (
 )
 
 
-
 class Task:
 	def __init__(self, id):
 		self.id = id
@@ -36,7 +35,6 @@ class Task:
 		self.history.append(self.status)
 		self.status = obj
 		return(0)
-
 
 
 class Scheduler:
@@ -63,6 +61,7 @@ class Scheduler:
 			passwd=settings.DB_PASS
 		)
 		self.cur = self.db.cursor()
+		self.cur.execute('SET SESSION wait_timeout = 0;')
 
 		self.d = download.Downloader()
 		self.p = preproc.Preprocessor()
