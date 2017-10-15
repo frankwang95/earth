@@ -1,234 +1,103 @@
-import curses
-import curses.textpad
-import os
 import time
 import threading
 
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 
-
-def padTabs(str):
-	str = ' ' + str
-	while len(str) < 20:
-		str += ' '
-	return(str)
-
-
-def progBar(perc, l):
-	str = '|'
-	n = int(perc * (l - 2))
-	while len(str) < (l - 1):
-		if n > 0:
-			str = str + '#'
-			n -= 1
-		else: str = str + ' '
-	str = str + '|'
-	return(str)
-
+from earth.data_import.scheduler import Scheduler
+import earth.data_import.dash_resources.html_elem as html_elem
+import earth.data_import.dash_resources.logs as logs
+import earth.data_import.dash_resources.queue as queue
+import earth.data_import.dash_resources.status as status
 
 
 class SchedulerIO:
-	def __init__(self, sched):
-		self.sched = sched
-		self.stdscr = curses.initscr()
-		self.stdscr.keypad(1)
-		self.stdscr.nodelay(1)
-		curses.noecho()
-		curses.cbreak()
+    def __init__(self):
+        self.sched = Scheduler()
+        self.app = dash.Dash()
+        self.app.css.append_css({'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'})
+        self.app.config['suppress_callback_exceptions']=True
+        self.app.layout = html.Div([
+            dcc.Location(id='url', refresh=False),
+            dcc.Interval(
+                id='updater',
+                interval=500
+            ),
+            html_elem.SIDEBAR,
+            html_elem.MAIN
+        ], style=html_elem.GLOBAL_STYLE)
 
-		# SET COLORS
-		curses.start_color()
-		try:
-			curses.init_color(20, 400, 400, 400)
-			curses.init_pair(1, curses.COLOR_BLACK, 20)
-		except:
-			curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-		curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
-		curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-		curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)
-		curses.init_pair(5, curses.COLOR_RED, curses.COLOR_BLACK)
-
-		# SET PARAMETERS
-		self.winTabs = ['Log', 'Schedule', 'Status']
-		self.currTab = 0
-		self.logScrollState = 0
-		self.jobScrollState = 0
-		self.instScrollState = 0
-
-		# SET WIN DIM
-		# windows should be at least 360 wide x 240 tall??
-		self.winH = self.stdscr.getmaxyx()[0]
-		self.winW = self.stdscr.getmaxyx()[1]
-
-		# INITIALIZE SUB WIN
-		# tabs
-		self.tabWin = curses.newwin(1, self.winW, 0, 0)
-		
-		# main win
-		self.mainWin = curses.newwin(self.winH - 2, self.winW, 1, 0)
-		
-		# command win
-		self.inWin = curses.newwin(1, self.winW, self.winH - 1, 0)
-		self.inTextBox = curses.textpad.Textbox(self.inWin)
-		self.inWin.nodelay(1)
-
-		self.stdscr.refresh()
-
-		while not self.sched.shutdownDownloadT or not self.sched.shutdownExtractT:
-			self.mainWin.erase()
-
-			c = self.stdscr.getch()
-			if c == ord(':'):
-				cmd = self.inTextBox.edit()
-				try:
-					if self.runCmd(cmd.strip()) == 1:
-						self.sched.addLog('>> command invalid: {0}'.format(cmd))
-				except Exception as e:
-					self.sched.addLog('>> command encountered exception: {0}'.format(e))
-				self.inWin.erase()
-
-			if c == curses.KEY_RIGHT:
-				self.currTab = (self.currTab + 1) % len(self.winTabs)
-			if c == curses.KEY_LEFT:
-				self.currTab = (self.currTab - 1) % len(self.winTabs)
-
-			self.dispTabs()
-			if self.currTab == 0: self.dispLog()
-			elif self.currTab == 1: self.dispSchedule()
-			elif self.currTab == 2: self.dispStatus()
-
-			self.tabWin.refresh()
-			self.mainWin.refresh()
-			self.inWin.refresh()
-			time.sleep(0.2)
-
-		curses.endwin()
+        self.definelogic()
+        self.run()
 
 
-	def dispTabs(self):
-		for i in range(len(self.winTabs)):
-			if i == self.currTab: self.tabWin.addstr(0, i * 20, padTabs(self.winTabs[i]), curses.color_pair(2))
-			else: self.tabWin.addstr(0, i * 20, padTabs(self.winTabs[i]), curses.color_pair(1))
-		return(0)
+    def definelogic(self):
+        @self.app.callback(
+            dash.dependencies.Output('main', 'children'),
+            [dash.dependencies.Input('url', 'pathname')]
+        )
+        def display_page(pathname):
+            self.state = pathname
+            if pathname=='/logs': return logs.layout
+            if pathname=='/queue': return queue.layout
+            if pathname=='/status': return status.layout
+
+        @self.app.callback(
+            dash.dependencies.Output('log_table', 'children'),
+            events=[dash.dependencies.Event('updater', 'interval')]
+        )
+        def log_updater():
+            with open('logs/{}'.format(self.sched.log_name), 'r') as f:
+                return logs.create_log_table(f.readlines()[:1000])
+
+        @self.app.callback(
+            dash.dependencies.Output('shutdown', 'children'),
+            [dash.dependencies.Input('shutdown', 'n_clicks')]
+        )
+        def shutdown_main(n_clicks):
+            if n_clicks > 0: self.sched.shutdownT = True
+            return 'Shutdown'
+
+        @self.app.callback(
+            dash.dependencies.Output('pause-master', 'style'),
+            [dash.dependencies.Input('pause-master', 'n_clicks')],
+            events=[dash.dependencies.Event('updater', 'interval')]
+        )
+        def master_pause(pause_n_clicks):
+            if self.sched.shutdownT: return {'width': 600, 'color': html_elem.RED}
+            if pause_n_clicks is not None: self.sched.pausedT = pause_n_clicks % 2 != 0
+
+            if self.sched.pausedT: return {'width': 600, 'color': html_elem.YELLOW}
+            return {'width': 600, 'color': html_elem.GREEN}
+
+        @self.app.callback(
+            dash.dependencies.Output('pause-preproc', 'style'),
+            [dash.dependencies.Input('pause-preproc', 'n_clicks')],
+            events=[dash.dependencies.Event('updater', 'interval')]
+        )
+        def shutdown_preproc_pause_switch(pause_n_clicks):
+            if self.sched.shutdownPreprocT: return {'width': 295, 'color': html_elem.RED}
+            if pause_n_clicks is not None: self.sched.pausedPreprocT = pause_n_clicks % 2 != 0
+
+            if self.sched.pausedPreprocT: return {'width': 295, 'color': html_elem.YELLOW}
+            return {'width': 295, 'color': html_elem.GREEN}
+
+        @self.app.callback(
+            dash.dependencies.Output('pause-download', 'style'),
+            [dash.dependencies.Input('pause-download', 'n_clicks')],
+            events=[dash.dependencies.Event('updater', 'interval')]
+        )
+        def shutdown_download_pause_switch(pause_n_clicks):
+            if self.sched.shutdownDownloadT: return {'width': 295, 'color': html_elem.RED, 'margin-left': 10}
+            if pause_n_clicks is not None: self.sched.pausedDownloadT = pause_n_clicks % 2 != 0
+
+            if self.sched.pausedDownloadT: return {'width': 295, 'color': html_elem.YELLOW, 'margin-left': 10}
+            return {'width': 295, 'color': html_elem.GREEN, 'margin-left': 10}
 
 
-	def dispStatus(self):
-		self.mainWin.addstr(0, 0, 'RUNNING STATUS', curses.A_BOLD | curses.A_UNDERLINE)
-
-		self.mainWin.addstr(1, 4, 'downloader ', curses.A_BOLD)
-		self.mainWin.addstr(1, 15, 'is ')
-		if self.sched.shutdownDownloadT:
-			self.mainWin.addstr(1, 18, 'shutdown', curses.color_pair(5))
-		elif self.sched.pausedDownloadT or self.sched.pausedT:
-			self.mainWin.addstr(1, 18, 'paused', curses.color_pair(3))
-		else:
-			self.mainWin.addstr(1, 18, 'running', curses.color_pair(4))
-
-		self.mainWin.addstr(2, 4, 'preprocessor ', curses.A_BOLD)
-		self.mainWin.addstr(2, 17, 'is ')
-		if self.sched.shutdownExtractT:
-			self.mainWin.addstr(2, 20, 'shutdown', curses.color_pair(5))
-		elif self.sched.pausedExtractT or self.sched.pausedT:
-			self.mainWin.addstr(2, 20, 'paused', curses.color_pair(3))
-		else:
-			self.mainWin.addstr(2, 20, 'running', curses.color_pair(4))
-
-		self.mainWin.addstr(5, 0, 'SCHEDULER STATISTICS', curses.A_BOLD | curses.A_UNDERLINE)
+    def run(self):
+        self.app.run_server()
 
 
-	def dispLog(self):
-		logItems = [i[:self.winW] for i in self.sched.log[-(self.winH - 2):]]
-		for i in range(len(logItems)):
-			self.mainWin.addstr(i, 0, logItems[i])
-		return(0)
-
-
-	def dispSchedule(self):
-		self.mainWin.addstr(0, 0, 'AUTO DOWNLOAD QUEUE', curses.A_BOLD | curses.A_UNDERLINE)
-		self.mainWin.addstr(0, 80, 'MANUAL DOWNLOAD QUEUE', curses.A_BOLD | curses.A_UNDERLINE)
-		self.mainWin.addstr(0, 160, 'PREPROCESSING QUEUE', curses.A_BOLD | curses.A_UNDERLINE)
-		
-		autoDownloadQueue = self.sched.d_queue_auto[:(self.winH - 3) / 5]
-		manDownloadQueue = self.sched.d_queue_man[:(self.winH - 3) / 5]
-		extQueue = self.sched.p_queue[:(self.winH - 3) / 5]
-
-		yn = 0
-		for task in autoDownloadQueue:
-			self.dispSingleDownload(task, yn * 5 + 2, 0)
-			yn += 1
-
-		yn = 0
-		for task in manDownloadQueue:
-			self.dispSingleDownload(task, yn * 5 + 2, 80)
-			yn += 1
-
-		yn = 0
-		for task in extQueue:
-			self.dispSingleExtraction(task, yn * 5 + 2, 160)
-			yn += 1
-		return(0)
-
-
-	def dispSingleDownload(self, task, y, x):
-		self.mainWin.addstr(y, x, 'sceneid: ', curses.A_BOLD)
-		self.mainWin.addstr(y, x + 9, task.id)
-		self.mainWin.addstr(y + 1, x, 'location: ' + 'NULL')
-		if task.status == 'PENDING':
-			self.mainWin.addstr(y + 2, x, 'pending download', curses.color_pair(3))
-		else:
-			prog = float(task.status.prog)/task.status.tot
-			self.mainWin.addstr(y + 2, x, 'downloading {0}/{1}'.format(task.status.prog, task.status.tot), curses.color_pair(4))
-			self.mainWin.addstr(y + 3, x, progBar(prog, 75))
-
-
-	def dispSingleExtraction(self, task, y, x):
-		self.mainWin.addstr(y, x, 'sceneid: ', curses.A_BOLD)
-		self.mainWin.addstr(y, x + 9, task.id)
-		self.mainWin.addstr(y + 1, x, 'location: ' + 'NULL')
-		if task.status == 'PENDING':
-			self.mainWin.addstr(y + 2, x, 'pending processing', curses.color_pair(3))
-		else:
-			prog = float(task.status.prog)/task.status.tot
-			if task.status.prog < 13:
-				self.mainWin.addstr(y + 2, x, 'extracting {0}/13'.format(task.status.prog), curses.color_pair(4))
-			elif task.status.prog == 13:
-				self.mainWin.addstr(y + 2, x, 'writing to HDF5 group', curses.color_pair(4))
-			elif task.status.prog > 13:
-				self.mainWin.addstr(y + 2, x, 'writing visible imagery', curses.color_pair(4))
-			self.mainWin.addstr(y + 3, x, progBar(prog, 75))
-		return(0)
-
-
-	def runCmd(self, cmd):
-		cmdspl = cmd.split()
-		if cmdspl[0] == 'shutdown':
-			self.currTab = 0
-			threading.Thread(target=self.sched.shutdown).start()
-			return(0)
-
-		if cmdspl[0] == 'pause':
-			if len(cmdspl) == 1:
-				self.sched.pausedT = not self.sched.pausedT
-				if self.sched.pausedT:
-					self.sched.addLog('scheduler paused')
-				else: self.sched.addLog('scheduler unpaused')
-				return(0)
-
-			if cmdspl[1] == 'preprocess':
-				self.sched.pausedExtractT = not self.sched.pausedExtractT
-				if self.sched.pausedExtractT:
-					self.sched.addLog('extractor paused')
-				else: self.sched.addLog('extractor unpaused')
-				return(0)
-
-			if cmdspl[1] == 'download':
-				self.sched.pausedDownloadT = not self.sched.pausedDownloadT
-				if self.sched.pausedDownloadT:
-					self.sched.addLog('downloader paused')
-				else: self.sched.addLog('downloader unpaused')
-				return(0)
-
-		if cmdspl[0] == 'insert':
-			self.sched.insertJob(cmdspl[1])
-			return(0)
-
-		return(1)
+SchedulerIO()
