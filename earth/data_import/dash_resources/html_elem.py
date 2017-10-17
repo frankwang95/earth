@@ -7,7 +7,7 @@ GLOBAL_STYLE = {
     'width': '100%',
     'height': '100%',
     'top': 0,
-    'left': 0,
+    'left': 0
 }
 
 CONTENT_TITLE_STYLE = {
@@ -23,7 +23,7 @@ YELLOW = '#ffc61c'
 
 #################### SIDEBAR ####################
 SIDEBAR_STYLE = {
-    'width': 200,
+    'width': 250,
     'position': 'fixed',
     'background': '#FFF',
     'height': '100%',
@@ -72,7 +72,7 @@ SIDEBAR = html.Div([
 
 #################### MAIN ####################
 MAIN_STYLE = {
-    'padding-left': 220,
+    'padding-left': 270,
     'padding-top': 20,
     'padding-right': 20,
     'padding-bottom': 20,
