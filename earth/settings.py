@@ -1,7 +1,7 @@
 ############################### DATA IMPORT SETTINGS #############################
 # Storage Location
-DATA_DIR = '/opt/earth_data/'
-# DATA_DIR = '/Users/frankwang/projects/earth/data'
+# DATA_DIR = '/opt/earth_data/'
+DATA_DIR = '/Users/frankwang/projects/earth/data'
 
 # Download Parameters
 DOWNLOAD_TIMEOUT = 2

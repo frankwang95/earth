@@ -39,8 +39,8 @@ def generateFilePathStr(sceneid = '', kind = '', file = ''):
 
 	if kind == 'preproc':
 		if file == 'visible' and sceneid != '': sceneid += '_V.TIF'
+		if file == 'land_class_kmeans2': sceneid += '.jpg'
 		return os.path.join(settings.DATA_DIR, kind, file, sceneid)
-		
 	return(settings.DATA_DIR)
 
 
