@@ -70,7 +70,6 @@ class DataLabelLoader(object):
                 y_list.append(y)
 
         reference_df = pd.DataFrame({'x_coord': x_list, 'y_coord': y_list})
-        np.save('test.npy', dataset)
         return dataset, reference_df
 
 
