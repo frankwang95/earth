@@ -114,7 +114,7 @@ class DataLabeling(object):
 
 
     def run(self):
-        self.app.run_server()
+        self.app.run_server(port=8051)
 
 
 DataLabeling()

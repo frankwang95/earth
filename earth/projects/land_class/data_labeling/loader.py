@@ -18,7 +18,7 @@ class DataLabelLoader(object):
         self.paused = False
         self.bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B9', 'BQA']
         self.grid_size = 16
-        self.dataset_size = 5000
+        self.dataset_size = 300000
         self.processed_outputs = {}
 
         thread = threading.Thread(target=self.main_loop)
