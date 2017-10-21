@@ -4,6 +4,7 @@ import random
 import h5py
 import numpy as np
 import pandas as pd
+import time
 from PIL import Image
 import threading
 import sklearn.cluster as cluster
@@ -28,6 +29,9 @@ class DataLabelLoader(object):
 
     def main_loop(self):
         while not self.paused:
+            if len(self.processed_outputs) >= 8;
+                time.sleep(10)
+
             lid = self.choose_lid()
             print "Processing {}...".format(lid)
             dataset, reference_df = self.get_dataset(lid, self.dataset_size)
