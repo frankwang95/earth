@@ -18,8 +18,9 @@ DB_PASS = ''
 DB = 'earthdat'
 
 
-############################### MMYSQL DATABASES #############################
+############################### MYSQL DATABASES #############################
 #### Image Index Database
+# Entries are consistent with Landsat 8 metadata - see their documentation
 '''
 imageindex(
 	lid CHAR(21) NOT NULL PRIMARY KEY,
@@ -46,5 +47,20 @@ imageindex(
 	sun_elev DECIMAL(15,10),
 	earth_sun_dist DECIMAL(15,10),
 	orientation VARCHAR(20)
+)
+'''
+
+#### Cloud Detection Clustering Data with K-Means @ 2
+# labels coding:
+## 0 cloud
+## 1 not cloud
+## 2 unknown
+'''
+cloud_detection_kmeans2(
+	entry_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	lid CHAR(21) NOT NULL,
+	x_coord SMALLINT UNSIGNED NOT NULL,
+	y_coord SMALLINT UNSIGNED NOT NULL,
+	label TINYINT UNSIGNED
 )
 '''
