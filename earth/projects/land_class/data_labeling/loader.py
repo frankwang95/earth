@@ -19,7 +19,7 @@ class DataLabelLoader(object):
         self.paused = False
         self.bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B9', 'BQA']
         self.grid_size = 16
-        self.dataset_size = 300000
+        self.dataset_size = 100000
         self.processed_outputs = {}
 
         thread = threading.Thread(target=self.main_loop)
@@ -29,8 +29,7 @@ class DataLabelLoader(object):
 
     def main_loop(self):
         while not self.paused:
-            if len(self.processed_outputs) >= 8;
-                time.sleep(10)
+            if len(self.processed_outputs) >= 8: time.sleep(10)
 
             lid = self.choose_lid()
             print "Processing {}...".format(lid)
@@ -84,18 +83,21 @@ class DataLabelLoader(object):
 
         image = np.asarray(Image.open(generateFilePathStr(lid, 'preproc', 'visible'))).copy()
         for i in range(group1.shape[0]):
-            image[group1[i,0], group1[i, 1], :] = np.array([255, 0, 0])
+            x = group1[i,0]
+            y = group1[i, 1]
+            image[x-1:x+2, y-1:y+2, 0] = 255
         for i in range(group2.shape[0]):
-            image[group2[i,0], group2[i, 1], :] = np.array([0, 255, 0])
+            x = group2[i,0]
+            y = group2[i, 1]
+            image[x-1:x+2, y-1:y+2, 1] = 255
         image = Image.fromarray(image)
-        large_image = image.copy()
+        image.save(generateFilePathStr(lid, 'preproc', 'cloud_detection_kmeans2'))
         image.thumbnail((1200, 1200))
 
         self.processed_outputs[lid] = {
             'cluster_labels': cluster_labels,
             'reference_df': reference_df,
             'image': image,
-            'large_image': large_image
         }
 
 
@@ -113,6 +115,4 @@ class DataLabelLoader(object):
             settings.DB_USER, settings.DB_HOST, settings.DB
         ))
         reference_df.to_sql('cloud_detection_kmeans2', conn, if_exists='append', index=False)
-
-        self.processed_outputs[lid]['large_image'].save(generateFilePathStr(lid, 'preproc', 'cloud_detection_kmeans2'))
         del self.processed_outputs[lid]
