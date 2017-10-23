@@ -93,7 +93,15 @@ class DataLabeling(object):
             red_button_clicks, green_button_clicks, neither_button_clicks,
             both_button_clicks, bad_cluster_button_clicks
         ):
-            if len(self.loader.processed_outputs.keys()) == 0: pass
+            if len(self.loader.processed_outputs.keys()) == 0: return None
+
+            if (
+                red_button_clicks is None and
+                green_button_clicks is None and
+                neither_button_clicks is None and
+                both_button_clicks is None and
+                bad_cluster_button_clicks is None
+            ): pass
             elif red_button_clicks != self.red_button_count:
                 self.loader.write_results(self.current_lid, [0])
             elif green_button_clicks != self.green_button_count:
