@@ -19,7 +19,7 @@ class DataLabelLoader(object):
         self.paused = False
         self.bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B9', 'BQA']
         self.grid_size = 16
-        self.dataset_size = 100000
+        self.dataset_size = 50000
         self.processed_outputs = {}
 
         thread = threading.Thread(target=self.main_loop)
@@ -29,7 +29,9 @@ class DataLabelLoader(object):
 
     def main_loop(self):
         while not self.paused:
-            if len(self.processed_outputs) >= 8: time.sleep(10)
+            if len(self.processed_outputs) >= 8:
+                time.sleep(10)
+                continue
 
             lid = self.choose_lid()
             print "Processing {}...".format(lid)
