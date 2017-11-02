@@ -41,7 +41,7 @@ class Preprocessor(object):
 			)
 			os.remove(generateFilePathStr(sceneid, 'raw', 'tar'))
 
-			preProcObj = LandsatPreProcess(sceneid, self.h5F)			
+			preProcObj = LandsatPreProcess(sceneid, self.h5F)
 			preProcObj.compute()
 			preProcObj.writeHDF_MAIN()
 			self.status.updateProg()
@@ -54,5 +54,5 @@ class Preprocessor(object):
 		except Exception as e:
 			purge_scene(sceneid, self.db, self.cur, self.h5F)
 			return(ExceptionObj('preprocing failed'))
-		
+
 		return(0)

@@ -89,7 +89,7 @@ class Scheduler:
 	def addScenes(self):
 		self.logger.info('adding available scenes to queue')
 		with open(os.path.join(
-			sys.prefix, 'lib', 'python2.7', 'site-packages', 'earth',
+			sys.prefix, 'lib', 'python3.6', 'site-packages', 'earth',
 			'data_import', 'available_scenes'
 		), 'r') as f: available_scenes = f.readlines()
 		random.shuffle(available_scenes)

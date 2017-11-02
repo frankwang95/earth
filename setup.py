@@ -23,7 +23,7 @@ setup(
 	include_package_data=True,
 	install_requires=[
 		'setuptools-git',
-		'MySQL-python',
+		'mysqlclient',
 		'h5py',
 		'numpy',
 		'requests',
