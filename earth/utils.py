@@ -1,4 +1,4 @@
-import settings
+import earth.settings as settings
 import time
 import os
 

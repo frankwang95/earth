@@ -1,7 +1,7 @@
 ############################### DATA IMPORT SETTINGS #############################
 # Storage Location
-DATA_DIR = '/opt/earth_data/'
-# DATA_DIR = '/Users/frankwang/projects/earth/data'
+# DATA_DIR = '/opt/earth_data/'
+DATA_DIR = '/Users/frankwang/projects/earth/data'
 
 # Download Parameters
 DOWNLOAD_TIMEOUT = 2
@@ -50,7 +50,7 @@ imageindex(
 )
 '''
 
-#### Cloud Detection Clustering Data with K-Means @ 2
+#### Cloud Detection Clustering Data with K-Means @ 2 using a 32x32 grid
 # labels coding:
 ## 0 cloud
 ## 1 not cloud
@@ -62,5 +62,31 @@ cloud_detection_kmeans2(
 	x_coord SMALLINT UNSIGNED NOT NULL,
 	y_coord SMALLINT UNSIGNED NOT NULL,
 	label TINYINT UNSIGNED
+)
+'''
+
+#### Labeled open Danish AIS data
+'''
+denmark_ais(
+	entry_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	timestamp DATETIME,
+	vessel_type TEXT,
+	mmsi INT UNSIGNED,
+	latitude DOUBLE,
+	longitude DOUBLE,
+	navigational_status TEXT,
+	rate_of_turn FLOAT,
+	speed_over_ground FLOAT,
+	course_over_ground FLOAT,
+	heading SMALLINT UNSIGNED,
+	imo INT UNSIGNED,
+	callsign VARCHAR(16),
+	name TEXT,
+	ship_type TEXT,
+	width SMALLINT UNSIGNED,
+	length SMALLINT UNSIGNED,
+	position_fixing_method TEXT,
+	draught FLOAT UNSIGNED,
+	data_source TEXT
 )
 '''
