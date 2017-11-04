@@ -52,7 +52,8 @@ def get_process_image(i):
 
 processes = []
 for i in range(20171001, 20171030):
-    if len(processes) > 4: for p in processes: p.join()
+    if len(processes) > 4:
+        for p in processes: p.join()
 
     p = Process(target=get_process_image, args=(i,))
     processes.append(p)
