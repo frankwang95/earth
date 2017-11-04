@@ -141,7 +141,7 @@ class Scheduler:
 				self.downloadHelper(x)
 				del self.d_queue_man[0]
 
-			elif len(self.d_queue_auto) > 0 and not self.pausedT and not self.pausedDownloadT:
+			elif len(self.d_queue_auto) > 0 and not self.pausedT and not self.pausedDownloadT and len(self.p_queue) < 10:
 				x = self.d_queue_auto[0]
 				self.downloadHelper(x)
 				del self.d_queue_auto[0]
