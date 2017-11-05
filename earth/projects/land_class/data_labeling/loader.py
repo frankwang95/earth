@@ -15,7 +15,7 @@ import earth.settings as settings
 
 class DataLabelLoader(object):
     def __init__(self):
-        print "Loader started"
+        print("Loader started")
         self.paused = False
         self.bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B9', 'BQA']
         self.grid_size = 16
@@ -34,10 +34,10 @@ class DataLabelLoader(object):
                 continue
 
             lid = self.choose_lid()
-            print "Processing {}...".format(lid)
+            print("Processing {}...".format(lid))
             dataset, reference_df = self.get_dataset(lid, self.dataset_size)
             self.process_image(lid, dataset, reference_df)
-            print "Done."
+            print("Done.")
 
 
     def choose_lid(self):
