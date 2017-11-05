@@ -36,7 +36,7 @@ class DataLabeling(object):
         data = self.loader.processed_outputs[self.current_lid]
         data['image'].save('image.png')
         encoded_image = base64.b64encode(open('image.png', 'rb').read())
-        return [html.Img(src='data:image/png;base64,{}'.format(encoded_image))]
+        return [html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()))]
 
 
     def generate_queue(self):
