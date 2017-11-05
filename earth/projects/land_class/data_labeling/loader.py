@@ -61,13 +61,13 @@ class DataLabelLoader(object):
                 while (subimage == 0).any():
                     dim = h5F[sceneid][self.bands[0]].shape
                     subimage = np.empty((len(self.bands), self.grid_size, self.grid_size))
-                    x = random.randint(self.grid_size / 2, dim[0] - self.grid_size / 2 - 1)
-                    y = random.randint(self.grid_size / 2, dim[1] - self.grid_size / 2 - 1)
+                    x = random.randint(int(self.grid_size / 2), dim[0] - int(self.grid_size / 2) - 1)
+                    y = random.randint(int(self.grid_size / 2), dim[1] - int(self.grid_size / 2) - 1)
 
                     for i, b in enumerate(self.bands):
                         subimage[i] = h5F[sceneid][b][
-                            x - self.grid_size / 2 : x + self.grid_size / 2,
-                            y - self.grid_size / 2 : y + self.grid_size / 2
+                            int(x - self.grid_size / 2) : int(x + self.grid_size / 2),
+                            int(y - self.grid_size / 2) : int(y + self.grid_size / 2)
                         ]
 
                 dataset[j] = subimage.flatten()
