@@ -32,7 +32,7 @@ class DataLabeling(object):
     def generate_image_block(self):
         if len(self.loader.processed_outputs.keys()) == 0: return []
 
-        self.current_lid = self.loader.processed_outputs.keys()[0]
+        self.current_lid = list(self.loader.processed_outputs.keys())[0]
         data = self.loader.processed_outputs[self.current_lid]
         data['image'].save('image.png')
         encoded_image = base64.b64encode(open('image.png', 'rb').read())
