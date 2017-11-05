@@ -6,8 +6,8 @@ import numpy as np
 exts = cythonize([Extension(
 	"pyPreProcPipe",
 	sources=[
-		"earth/data_import/cython/cPreProcPipe.c",
-		"earth/data_import/cython/pyPreProcPipe.pyx"
+		"earth/data_import/landsat/cython/cPreProcPipe.c",
+		"earth/data_import/landsat/cython/pyPreProcPipe.pyx"
 	],
 	include_dirs=[np.get_include()]
 )])

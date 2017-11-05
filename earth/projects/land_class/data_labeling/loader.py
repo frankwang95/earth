@@ -9,7 +9,7 @@ from PIL import Image
 import threading
 import sklearn.cluster as cluster
 
-from earth.data_import.dataImportUtils import generateFilePathStr
+from earth.data_import.landsat.dataImportUtils import generateFilePathStr
 import earth.settings as settings
 
 
