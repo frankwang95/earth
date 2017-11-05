@@ -44,7 +44,7 @@ bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'BQ
 class LandsatPreProcess:
 	def __init__(self, sceneid, h5F):
 		self.id = sceneid
-		
+
 		self.images = {}
 		for b in bands:
 			self.images[b] = np.array(Image.open(generateFilePathStr(sceneid, 'raw', b)), dtype = 'uint16')
@@ -58,14 +58,14 @@ class LandsatPreProcess:
 				self.images['B4'],
 				self.images['B3'],
 				self.images['B2']
-			))	
+			))
 			pyAdjustLevels(self.visible)
 		return(0)
 
 
 	def generateDownsize(self):
 		for b in bands:
-			outRes = np.zeros((self.images[b].shape[0]/2, self.images[b].shape[1]/2), dtype='uint16')
+			outRes = np.zeros((int(self.images[b].shape[0]/2), int(self.images[b].shape[1]/2)), dtype='uint16')
 			pyDownsize(self.images[b], outRes)
 			self.images[b] = outRes
 

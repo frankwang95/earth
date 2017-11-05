@@ -1,6 +1,7 @@
 import os
 from os.path import exists, getsize
 import h5py
+import traceback
 import MySQLdb as sql
 
 from earth.data_import.dataImportUtils import PreProcStatus, purge_scene, metadataInsert
@@ -51,8 +52,9 @@ class Preprocessor(object):
 			metadataInsert(sceneid, self.db, self.cur)
 			preProcObj.close()
 
-		except Exception as e:
+		except:
+			traceback.print_exc()
 			purge_scene(sceneid, self.db, self.cur, self.h5F)
-			return(ExceptionObj('preprocing failed'))
+			return(ExceptionObj('preprocessing failed'))
 
 		return(0)
