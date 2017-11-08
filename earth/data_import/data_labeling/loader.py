@@ -55,7 +55,7 @@ class DataLabelLoader(object):
         y_list = []
         dataset = np.empty((n, len(self.bands) * self.grid_size ** 2))
 
-        with h5py.File(generateFilePathStr(kind = 'database'), 'r') as h5F:
+        with h5py.File(generateFilePathStr(kind = 'database'), 'r', swmr=True) as h5F:
             for j in range(n):
                 subimage = np.array(0)
                 while (subimage == 0).any():
