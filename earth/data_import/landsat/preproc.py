@@ -24,7 +24,8 @@ class Preprocessor(object):
 		)
 		self.cur = self.db.cursor()
 
-		self.h5F = h5py.File(generateFilePathStr(kind='database'), 'a')
+		self.h5F = h5py.File(generateFilePathStr(kind='database'), 'a', libver='latest')
+		self.h5F.swmr_mode = True
 
 
 	def preproc(self, sceneid, status = None):
