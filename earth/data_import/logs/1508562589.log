@@ -1,0 +1,11 @@
+[2017:10:21-05:09:49] [INFO] adding available scenes to queue
+[2017:10:21-05:09:55] [INFO] queue updated with all available scenes
+[2017:10:21-05:09:55] [INFO] scheduler started
+[2017:10:21-05:09:55] [INFO] downloading scene: LC81980332016298LGN00
+[2017:10:21-05:10:05] [INFO] scene LC81980332016298LGN00 downloaded, added to processing queue
+[2017:10:21-05:10:05] [INFO] processing scene: LC81980332016298LGN00
+[2017:10:21-05:10:10] [INFO] downloading scene: LC81080122015145LGN00
+[2017:10:21-05:10:36] [INFO] scene LC81080122015145LGN00 downloaded, added to processing queue
+[2017:10:21-05:10:41] [INFO] downloading scene: LC81770242016343LGN00
+[2017:10:21-05:10:56] [INFO] scene LC81770242016343LGN00 downloaded, added to processing queue
+[2017:10:21-05:11:01] [INFO] downloading scene: LC80560172016039LGN00

@@ -1,0 +1,54 @@
+[2017:10:21-05:30:54] [INFO] adding available scenes to queue
+[2017:10:21-05:31:00] [INFO] queue updated with all available scenes
+[2017:10:21-05:31:00] [INFO] scheduler started
+[2017:10:21-05:31:00] [INFO] downloading scene: LC80650052017104LGN00
+[2017:10:21-05:31:09] [INFO] scene LC80650052017104LGN00 downloaded, added to processing queue
+[2017:10:21-05:31:10] [INFO] processing scene: LC80650052017104LGN00
+[2017:10:21-05:31:14] [INFO] downloading scene: LC80030122014062LGN00
+[2017:10:21-05:31:28] [INFO] scene LC80030122014062LGN00 downloaded, added to processing queue
+[2017:10:21-05:31:33] [INFO] downloading scene: LC81091112015008LGN00
+[2017:10:21-05:31:56] [INFO] scene LC81091112015008LGN00 downloaded, added to processing queue
+[2017:10:21-05:32:01] [INFO] downloading scene: LC80140232015094LGN00
+[2017:10:21-05:32:27] [INFO] scene LC80140232015094LGN00 downloaded, added to processing queue
+[2017:10:21-05:32:32] [INFO] downloading scene: LC82081222015013LGN00
+[2017:10:21-05:32:53] [INFO] scene LC82081222015013LGN00 downloaded, added to processing queue
+[2017:10:21-05:32:58] [INFO] downloading scene: LC81720462015321LGN00
+[2017:10:21-05:33:25] [INFO] scene LC81720462015321LGN00 downloaded, added to processing queue
+[2017:10:21-05:33:30] [INFO] downloading scene: LC81760292015333LGN00
+[2017:10:21-05:33:57] [INFO] scene LC81760292015333LGN00 downloaded, added to processing queue
+[2017:10:21-05:34:02] [INFO] downloading scene: LC81790242015306LGN00
+[2017:10:21-05:34:03] [INFO] scene LC81790242015306LGN00 download failure, attempts remaining: (2/2)
+[2017:10:21-05:34:05] [INFO] scene LC81790242015306LGN00 download failure, attempts remaining: (1/2)
+[2017:10:21-05:34:07] [INFO] scene LC81790242015306LGN00 download failure timeout, aborting
+[2017:10:21-05:34:12] [INFO] downloading scene: LC80431122016300LGN00
+[2017:10:21-05:34:39] [INFO] scene LC80431122016300LGN00 downloaded, added to processing queue
+[2017:10:21-05:34:44] [INFO] downloading scene: LC81770712014049LGN00
+[2017:10:21-05:35:15] [INFO] scene LC81770712014049LGN00 downloaded, added to processing queue
+[2017:10:21-05:35:20] [INFO] downloading scene: LC80440042016243LGN00
+[2017:10:21-05:35:49] [INFO] scene LC80440042016243LGN00 downloaded, added to processing queue
+[2017:10:21-05:35:54] [INFO] downloading scene: LC81530252015348LGN00
+[2017:10:21-05:36:20] [INFO] scene LC81530252015348LGN00 downloaded, added to processing queue
+[2017:10:21-05:36:25] [INFO] downloading scene: LC81250212015280LGN00
+[2017:10:21-05:36:48] [INFO] scene LC81250212015280LGN00 downloaded, added to processing queue
+[2017:10:21-05:38:22] [INFO] scene LC80650052017104LGN00 processed
+[2017:10:21-05:38:27] [INFO] processing scene: LC80030122014062LGN00
+[2017:10:21-05:39:01] [INFO] downloading scene: LC81440472013327LGN00
+[2017:10:21-05:39:29] [INFO] scene LC81440472013327LGN00 downloaded, added to processing queue
+[2017:10:21-05:39:34] [INFO] downloading scene: LC80130572013177LGN01
+[2017:10:21-05:40:01] [INFO] scene LC80130572013177LGN01 downloaded, added to processing queue
+[2017:10:21-05:40:06] [INFO] downloading scene: LC80111112014358LGN00
+[2017:10:21-05:40:35] [INFO] scene LC80111112014358LGN00 downloaded, added to processing queue
+[2017:10:21-05:40:40] [INFO] downloading scene: LC81760482015141LGN00
+[2017:10:21-05:41:03] [INFO] scene LC81760482015141LGN00 downloaded, added to processing queue
+[2017:10:21-05:44:26] [INFO] scene LC80030122014062LGN00 processed
+[2017:10:21-05:44:31] [INFO] processing scene: LC81091112015008LGN00
+[2017:10:21-05:50:50] [INFO] scene LC81091112015008LGN00 processed
+[2017:10:21-05:50:55] [INFO] processing scene: LC80140232015094LGN00
+[2017:10:21-05:55:54] [INFO] shutting down scheduler...
+[2017:10:21-05:55:54] [INFO] waiting for threads to complete tasks before beginning cleanup...
+[2017:10:21-05:55:56] [INFO] shutdown detected and acknowledged by downloader
+[2017:10:21-05:56:57] [INFO] scene LC80140232015094LGN00 processed
+[2017:10:21-05:57:02] [INFO] shutdown detected and acknowledged by preprocessor
+[2017:10:21-05:57:12] [WARNING] HDF5 resources closed
+[2017:10:21-05:57:12] [WARNING] SQL resources closed
+[2017:10:21-05:57:12] [WARNING] all resources have closed successfully

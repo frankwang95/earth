@@ -1,0 +1,104 @@
+[2017:11:06-00:21:58] [INFO] adding available scenes to queue
+[2017:11:06-00:22:04] [INFO] queue updated with all available scenes
+[2017:11:06-00:22:04] [INFO] scheduler started
+[2017:11:06-00:22:04] [INFO] downloading scene: LC80890122015203LGN00
+[2017:11:06-00:22:10] [INFO] scene LC80890122015203LGN00 downloaded, added to processing queue
+[2017:11:06-00:22:14] [INFO] processing scene: LC80890122015203LGN00
+[2017:11:06-00:22:15] [INFO] downloading scene: LC81160612013291LGN00
+[2017:11:06-00:22:22] [INFO] scene LC81160612013291LGN00 downloaded, added to processing queue
+[2017:11:06-00:22:27] [INFO] downloading scene: LC81050092013278LGN00
+[2017:11:06-00:22:36] [INFO] scene LC81050092013278LGN00 downloaded, added to processing queue
+[2017:11:06-00:22:41] [INFO] downloading scene: LC81700752016182LGN00
+[2017:11:06-00:22:47] [INFO] scene LC81700752016182LGN00 downloaded, added to processing queue
+[2017:11:06-00:22:52] [INFO] downloading scene: LC80220212015198LGN00
+[2017:11:06-00:23:00] [INFO] scene LC80220212015198LGN00 downloaded, added to processing queue
+[2017:11:06-00:23:05] [INFO] downloading scene: LC80460012015254LGN00
+[2017:11:06-00:23:12] [INFO] scene LC80460012015254LGN00 downloaded, added to processing queue
+[2017:11:06-00:23:17] [INFO] downloading scene: LC81750762014099LGN00
+[2017:11:06-00:23:26] [INFO] scene LC81750762014099LGN00 downloaded, added to processing queue
+[2017:11:06-00:23:31] [INFO] downloading scene: LC81041112017026LGN00
+[2017:11:06-00:23:37] [INFO] scene LC81041112017026LGN00 downloaded, added to processing queue
+[2017:11:06-00:23:42] [INFO] downloading scene: LC80330122015147LGN00
+[2017:11:06-00:23:48] [INFO] scene LC80330122015147LGN00 downloaded, added to processing queue
+[2017:11:06-00:23:53] [INFO] downloading scene: LC82160042016152LGN00
+[2017:11:06-00:24:00] [INFO] scene LC82160042016152LGN00 downloaded, added to processing queue
+[2017:11:06-00:27:45] [INFO] scene LC80890122015203LGN00 processed
+[2017:11:06-00:27:46] [INFO] downloading scene: LC81070662015154LGN00
+[2017:11:06-00:27:50] [INFO] processing scene: LC81160612013291LGN00
+[2017:11:06-00:27:52] [INFO] scene LC81070662015154LGN00 downloaded, added to processing queue
+[2017:11:06-00:33:33] [INFO] scene LC81160612013291LGN00 processed
+[2017:11:06-00:33:38] [INFO] downloading scene: LC82181202017040LGN00
+[2017:11:06-00:33:38] [INFO] processing scene: LC81050092013278LGN00
+[2017:11:06-00:33:44] [INFO] scene LC82181202017040LGN00 downloaded, added to processing queue
+[2017:11:06-00:39:32] [INFO] scene LC81050092013278LGN00 processed
+[2017:11:06-00:39:34] [INFO] downloading scene: LC82000382014242LGN00
+[2017:11:06-00:39:37] [INFO] processing scene: LC81700752016182LGN00
+[2017:11:06-00:39:41] [INFO] scene LC82000382014242LGN00 downloaded, added to processing queue
+[2017:11:06-00:45:08] [INFO] scene LC81700752016182LGN00 processed
+[2017:11:06-00:45:11] [INFO] downloading scene: LC81580422016002LGN00
+[2017:11:06-00:45:13] [INFO] processing scene: LC80220212015198LGN00
+[2017:11:06-00:45:18] [INFO] scene LC81580422016002LGN00 downloaded, added to processing queue
+[2017:11:06-00:50:52] [INFO] scene LC80220212015198LGN00 processed
+[2017:11:06-00:50:53] [INFO] downloading scene: LC80270012014262LGN00
+[2017:11:06-00:50:57] [INFO] processing scene: LC80460012015254LGN00
+[2017:11:06-00:50:58] [INFO] scene LC80270012014262LGN00 downloaded, added to processing queue
+[2017:11:06-00:56:22] [INFO] scene LC80460012015254LGN00 processed
+[2017:11:06-00:56:24] [INFO] downloading scene: LC81270482016169LGN00
+[2017:11:06-00:56:27] [INFO] processing scene: LC81750762014099LGN00
+[2017:11:06-00:56:31] [INFO] scene LC81270482016169LGN00 downloaded, added to processing queue
+[2017:11:06-01:02:50] [INFO] scene LC81750762014099LGN00 processed
+[2017:11:06-01:02:55] [INFO] downloading scene: LC81330452015144LGN00
+[2017:11:06-01:02:55] [INFO] processing scene: LC81041112017026LGN00
+[2017:11:06-01:03:04] [INFO] scene LC81330452015144LGN00 downloaded, added to processing queue
+[2017:11:06-01:09:21] [INFO] scene LC81041112017026LGN00 processed
+[2017:11:06-01:09:25] [INFO] downloading scene: LC82330572016335LGN00
+[2017:11:06-01:09:26] [INFO] processing scene: LC80330122015147LGN00
+[2017:11:06-01:09:33] [INFO] scene LC82330572016335LGN00 downloaded, added to processing queue
+[2017:11:06-01:15:19] [INFO] scene LC80330122015147LGN00 processed
+[2017:11:06-01:15:23] [INFO] downloading scene: LC80320232016255LGN00
+[2017:11:06-01:15:24] [INFO] processing scene: LC82160042016152LGN00
+[2017:11:06-01:15:41] [INFO] scene LC80320232016255LGN00 downloaded, added to processing queue
+[2017:11:06-01:21:32] [INFO] scene LC82160042016152LGN00 processed
+[2017:11:06-01:21:36] [INFO] downloading scene: LC81500142016170LGN00
+[2017:11:06-01:21:37] [INFO] processing scene: LC81070662015154LGN00
+[2017:11:06-01:21:43] [INFO] scene LC81500142016170LGN00 downloaded, added to processing queue
+[2017:11:06-01:27:34] [INFO] scene LC81070662015154LGN00 processed
+[2017:11:06-01:27:39] [INFO] downloading scene: LC81330392016339LGN00
+[2017:11:06-01:27:39] [INFO] processing scene: LC82181202017040LGN00
+[2017:11:06-01:27:47] [INFO] scene LC81330392016339LGN00 downloaded, added to processing queue
+[2017:11:06-01:33:26] [INFO] scene LC82181202017040LGN00 processed
+[2017:11:06-01:33:28] [INFO] downloading scene: LC80970732014241LGN00
+[2017:11:06-01:33:31] [INFO] processing scene: LC82000382014242LGN00
+[2017:11:06-01:33:35] [INFO] scene LC80970732014241LGN00 downloaded, added to processing queue
+[2017:11:06-01:39:55] [INFO] scene LC82000382014242LGN00 processed
+[2017:11:06-01:39:59] [INFO] downloading scene: LC81250292014085LGN00
+[2017:11:06-01:40:00] [INFO] processing scene: LC81580422016002LGN00
+[2017:11:06-01:40:06] [INFO] scene LC81250292014085LGN00 downloaded, added to processing queue
+[2017:11:06-01:46:01] [INFO] scene LC81580422016002LGN00 processed
+[2017:11:06-01:46:02] [INFO] downloading scene: LC81920342015237LGN00
+[2017:11:06-01:46:06] [INFO] processing scene: LC80270012014262LGN00
+[2017:11:06-01:46:07] [INFO] scene LC81920342015237LGN00 downloaded, added to processing queue
+[2017:11:06-01:51:49] [INFO] scene LC80270012014262LGN00 processed
+[2017:11:06-01:51:53] [INFO] downloading scene: LC82250672017105LGN00
+[2017:11:06-01:51:54] [INFO] processing scene: LC81270482016169LGN00
+[2017:11:06-01:52:04] [INFO] scene LC82250672017105LGN00 downloaded, added to processing queue
+[2017:11:06-01:57:28] [INFO] scene LC81270482016169LGN00 processed
+[2017:11:06-01:57:29] [INFO] downloading scene: LC81740722013185LGN00
+[2017:11:06-01:57:33] [INFO] processing scene: LC81330452015144LGN00
+[2017:11:06-01:57:36] [INFO] scene LC81740722013185LGN00 downloaded, added to processing queue
+[2017:11:06-02:03:48] [INFO] scene LC81330452015144LGN00 processed
+[2017:11:06-02:03:51] [INFO] downloading scene: LC81680652015069LGN00
+[2017:11:06-02:03:53] [INFO] processing scene: LC82330572016335LGN00
+[2017:11:06-02:03:58] [INFO] scene LC81680652015069LGN00 downloaded, added to processing queue
+[2017:11:06-02:09:44] [INFO] scene LC82330572016335LGN00 processed
+[2017:11:06-02:09:44] [INFO] downloading scene: LC81100362016210LGN00
+[2017:11:06-02:09:49] [INFO] processing scene: LC80320232016255LGN00
+[2017:11:06-02:09:52] [INFO] scene LC81100362016210LGN00 downloaded, added to processing queue
+[2017:11:06-02:11:22] [INFO] shutdown detected and acknowledged by downloader
+[2017:11:06-02:11:22] [INFO] shutting down scheduler...
+[2017:11:06-02:11:22] [INFO] waiting for threads to complete tasks before beginning cleanup...
+[2017:11:06-02:16:23] [INFO] scene LC80320232016255LGN00 processed
+[2017:11:06-02:16:28] [INFO] shutdown detected and acknowledged by preprocessor
+[2017:11:06-02:16:35] [WARNING] HDF5 resources closed
+[2017:11:06-02:16:35] [WARNING] SQL resources closed
+[2017:11:06-02:16:35] [WARNING] all resources have closed successfully

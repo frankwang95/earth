@@ -1,0 +1,26 @@
+[2017:11:04-20:37:47] [INFO] adding available scenes to queue
+[2017:11:04-20:37:52] [INFO] queue updated with all available scenes
+[2017:11:04-20:37:53] [INFO] scheduler started
+[2017:11:04-20:37:53] [INFO] downloading scene: LC80130112016058LGN00
+[2017:11:04-20:38:00] [INFO] scene LC80130112016058LGN00 downloaded, added to processing queue
+[2017:11:04-20:38:03] [INFO] processing scene: LC80130112016058LGN00
+[2017:11:04-20:38:05] [INFO] downloading scene: LC81680732015181LGN00
+[2017:11:04-20:38:11] [INFO] scene LC81680732015181LGN00 downloaded, added to processing queue
+[2017:11:04-20:38:16] [INFO] downloading scene: LC81141132014296LGN00
+[2017:11:04-20:38:23] [INFO] scene LC81141132014296LGN00 downloaded, added to processing queue
+[2017:11:04-20:38:28] [INFO] downloading scene: LC81440532015301LGN00
+[2017:11:04-20:38:35] [INFO] scene LC81440532015301LGN00 downloaded, added to processing queue
+[2017:11:04-20:38:40] [INFO] downloading scene: LC82031812014183LGN00
+[2017:11:04-20:38:44] [INFO] scene LC82031812014183LGN00 downloaded, added to processing queue
+[2017:11:04-20:38:49] [INFO] downloading scene: LC80180382013180LGN00
+[2017:11:04-20:38:56] [INFO] scene LC80180382013180LGN00 downloaded, added to processing queue
+[2017:11:04-20:39:01] [INFO] downloading scene: LC81630312016325LGN00
+[2017:11:04-20:39:08] [INFO] shutting down scheduler...
+[2017:11:04-20:39:08] [INFO] waiting for threads to complete tasks before beginning cleanup...
+[2017:11:04-20:39:09] [INFO] scene LC81630312016325LGN00 downloaded, added to processing queue
+[2017:11:04-20:39:14] [INFO] shutdown detected and acknowledged by downloader
+[2017:11:04-20:41:58] [INFO] scene LC80130112016058LGN00 processing failed
+[2017:11:04-20:42:03] [INFO] shutdown detected and acknowledged by preprocessor
+[2017:11:04-20:42:09] [WARNING] HDF5 resources closed
+[2017:11:04-20:42:09] [WARNING] SQL resources closed
+[2017:11:04-20:42:09] [WARNING] all resources have closed successfully
