@@ -118,9 +118,9 @@ class DataLabeling(object):
             elif green_button_clicks != self.green_button_count:
                 self.loader.write_results(self.current_lid, [1])
             elif neither_button_clicks != self.neither_button_count:
-                self.loader.write_results(self.current_lid, [0, 1])
-            elif both_button_clicks != self.both_button_count:
                 self.loader.write_results(self.current_lid, [])
+            elif both_button_clicks != self.both_button_count:
+                self.loader.write_results(self.current_lid, [0, 1])
             elif bad_cluster_button_clicks != self.bad_cluster_button_count:
                 self.loader.write_results(self.current_lid, None)
 

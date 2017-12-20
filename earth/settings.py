@@ -1,7 +1,7 @@
 ############################### DATA IMPORT SETTINGS #############################
 # Storage Location
-DATA_DIR = '/opt/earth_data/'
-# DATA_DIR = '/Users/frankwang/projects/earth/data'
+# DATA_DIR = '/opt/earth_data/'
+DATA_DIR = '/Users/frankwang/projects/earth/data'
 
 # Download Parameters
 DOWNLOAD_TIMEOUT = 2
@@ -12,8 +12,8 @@ S3_LANDSAT = 'http://landsat-pds.s3.amazonaws.com/'
 API_URL = 'https://api.developmentseed.org/satellites/landsat'
 
 # Mysql Parameters
-# DB_HOST = '35.203.181.94'
-DB_HOST = '104.199.118.158'
+DB_HOST = '35.203.181.94'
+# DB_HOST = '104.199.118.158'
 DB_USER = 'root'
 DB_PASS = ''
 DB = 'earthdat'
