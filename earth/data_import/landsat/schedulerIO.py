@@ -43,7 +43,7 @@ def display_page(pathname):
 )
 def log_updater():
     with open('logs/{}'.format(sched.log_name), 'r') as f:
-        return logs.create_log_table(f.readlines()[:500])
+        return logs.create_log_table(f.readlines()[100:])
 
 
 @app.callback(
