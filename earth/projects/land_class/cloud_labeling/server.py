@@ -6,8 +6,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 import base64
 
-import earth.data_import.data_labeling.html_elem as html_elem
-from earth.data_import.data_labeling.loader import DataLabelLoader
+import earth.projects.land_class.cloud_labeling.html_elem as html_elem
+from earth.projects.land_class.cloud_labeling.loader import DataLabelLoader
 
 
 class DataLabeling(object):
