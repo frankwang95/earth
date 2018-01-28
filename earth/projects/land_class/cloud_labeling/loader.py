@@ -20,6 +20,7 @@ class DataLabelLoader(object):
         self.bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B9']
         self.grid_size = 16
         self.dataset_size = 20000
+        self.max_queued_items = 20
         self.processed_outputs = {}
 
         thread = threading.Thread(target=self.main_loop)
@@ -29,7 +30,7 @@ class DataLabelLoader(object):
 
     def main_loop(self):
         while not self.paused:
-            if len(self.processed_outputs) >= 8:
+            if len(self.processed_outputs) >= self.max_queued_items:
                 time.sleep(10)
                 continue
 
@@ -116,5 +117,5 @@ class DataLabelLoader(object):
         conn = create_engine("mysql://{}:{}@{}/{}".format(
             settings.DB_USER, settings.DB_PASS, settings.DB_HOST, settings.DB
         ))
-        reference_df.to_sql('cloud_detection_kmeans2', conn, if_exists='append', index=False)
+        reference_df.to_sql('cloud_detection_clustering', conn, if_exists='append', index=False)
         del self.processed_outputs[lid]
