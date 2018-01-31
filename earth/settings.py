@@ -55,7 +55,7 @@ imageindex(
 ## 1 not cloud
 ## 2 unknown
 '''
-cloud_detection_kmeans2(
+cloud_detection_clustering(
 	entry_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	lid CHAR(21) NOT NULL,
 	x_coord SMALLINT UNSIGNED NOT NULL,

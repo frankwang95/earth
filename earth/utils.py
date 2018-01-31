@@ -39,7 +39,7 @@ def generateFilePathStr(sceneid = '', kind = '', file = ''):
 
 	if kind == 'preproc':
 		if file == 'visible' and sceneid != '': sceneid += '_V.TIF'
-		if file == 'cloud_detection_kmeans2': sceneid += '.jpg'
+		if file == 'cloud_detection_clustering': sceneid += '.jpg'
 		return os.path.join(settings.DATA_DIR, kind, file, sceneid)
 	return(settings.DATA_DIR)
 

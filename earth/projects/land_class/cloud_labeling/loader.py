@@ -93,7 +93,7 @@ class DataLabelLoader(object):
             y = group2[i, 1]
             image[x-1:x+2, y-1:y+2, 1] = 255
         image = Image.fromarray(image)
-        image.save(generateFilePathStr(lid, 'preproc', 'cloud_detection_kmeans2'))
+        image.save(generateFilePathStr(lid, 'preproc', 'cloud_detection_clustering'))
         image.thumbnail((1200, 1200))
 
         self.processed_outputs[lid] = {
@@ -116,5 +116,5 @@ class DataLabelLoader(object):
         conn = create_engine("mysql://{}@{}/{}".format(
             settings.DB_USER, settings.DB_HOST, settings.DB
         ))
-        reference_df.to_sql('cloud_detection_kmeans2', conn, if_exists='append', index=False)
+        reference_df.to_sql('cloud_detection_clustering', conn, if_exists='append', index=False)
         del self.processed_outputs[lid]
