@@ -113,8 +113,8 @@ class DataLabelLoader(object):
             reference_df['label'].loc[np.isin(cluster_labels, group)] = 0
         else: reference_df['label'] = 2
 
-        conn = create_engine("mysql://{}@{}/{}".format(
-            settings.DB_USER, settings.DB_HOST, settings.DB
+        conn = create_engine("mysql://{}:{}@{}/{}".format(
+            settings.DB_USER, settings.DB_PASS, settings.DB_HOST, settings.DB
         ))
         reference_df.to_sql('cloud_detection_clustering', conn, if_exists='append', index=False)
         del self.processed_outputs[lid]
