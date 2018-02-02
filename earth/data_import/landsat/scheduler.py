@@ -40,9 +40,9 @@ class Scheduler:
 	def __init__(self):
 		#check-installation
 		check_create_folder(generateFilePathStr())
-		check_create_folder(generateFilePathStr(kind = 'raw'))
-		check_create_folder(generateFilePathStr(kind = 'preproc'))
-		check_create_folder(generateFilePathStr(kind = 'preproc', file = 'visible'))
+		check_create_folder(generateFilePathStr(kind='raw'))
+		check_create_folder(generateFilePathStr(kind='preproc'))
+		check_create_folder(generateFilePathStr(kind='preproc', file='visible'))
 		check_create_folder('logs')
 
 		self.log_name = str(int(time.time())) + '.log'

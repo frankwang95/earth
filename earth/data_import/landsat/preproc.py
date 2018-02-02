@@ -1,4 +1,5 @@
 import os
+import time
 from os.path import exists, getsize
 import h5py
 import traceback
@@ -11,21 +12,17 @@ from earth.data_import.landsat.preprocH import *
 
 
 
-############################### PREPROCESSOR CLASS #############################
+############################# PREPROCESSOR CLASS #############################
 class Preprocessor(object):
 	def __init__(self):
 		self.status = 'IDLE'
-
-		self.db = sql.connect(
-			db=settings.DB,
-			host=settings.DB_HOST,
-			user=settings.DB_USER,
-			passwd=settings.DB_PASS
-		)
-		self.cur = self.db.cursor()
-
+	 	self.sql_parameters = {
+			'db': settings.DB,
+			'host': settings.DB_HOST,
+			'user': settings.DB_USER,
+			'passwd': settings.DB_PASS
+		}
 		self.h5F = h5py.File(generateFilePathStr(kind='database'), 'a', libver='latest')
-		self.h5F.swmr_mode = True
 
 
 	def preproc(self, sceneid, status = None):
@@ -50,7 +47,12 @@ class Preprocessor(object):
 			preProcObj.writeVis_MAIN()
 			self.status.updateProg()
 
+			db = sql.connect(**self.sql_parameters)
+			cur = db.cursor()
 			metadataInsert(sceneid, self.db, self.cur)
+			cur.close()
+			db.close()
+
 			preProcObj.close()
 
 		except:
