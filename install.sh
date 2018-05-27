@@ -11,3 +11,6 @@ source activate earth
 # Install Python dependencies
 pip install $(cat requirements.txt)
 pip install --upgrade .
+
+# Manual Step:
+# Copy datacollection/landsat/available_scenes to root data directory.
