@@ -6,15 +6,15 @@ import numpy as np
 exts = cythonize([Extension(
 	"pyPreProcPipe",
 	sources=[
-		"earth/data_import/landsat/cython/cPreProcPipe.c",
-		"earth/data_import/landsat/cython/pyPreProcPipe.pyx"
+		"datacollection/landsat/cython/cPreProcPipe.c",
+		"datacollection/landsat/cython/pyPreProcPipe.pyx"
 	],
 	include_dirs=[np.get_include()]
 )])
 
 
 setup(
-	name='earth-learn',
+	name='earth-data-import',
 	version='0.0.0',
 	author='Frank Wang',
 	author_email='fkwang@uchicago.edu',
