@@ -15,8 +15,9 @@ import datacollection.settings as settings
 
 
 class Downloader(object):
-	def __init__(self):
+	def __init__(self, logger):
 		self.status = 'IDLE'
+		self.logger = logger
 		self.google = settings.GOOGLE_STORAGE
 		self.s3 = settings.S3_LANDSAT
 

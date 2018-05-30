@@ -128,8 +128,6 @@ def purge_scene(sceneid, db, cur, h5F):
     try: del h5F[sceneid]
     except: pass
 
-    return(0)
-
 
 def cleanup(db, cur, h5F):
     # get image lists

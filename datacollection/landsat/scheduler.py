@@ -72,8 +72,8 @@ class Scheduler:
 		self.cur = self.db.cursor()
 		self.cur.execute('SET SESSION wait_timeout=31536000;')
 
-		self.d = download.Downloader()
-		self.p = preproc.Preprocessor()
+		self.d = download.Downloader(self.logger)
+		self.p = preproc.Preprocessor(self.logger)
 
 		self.d_queue_auto = []
 		self.d_queue_man = []
@@ -165,9 +165,7 @@ class Scheduler:
 					continue
 
 				x.updateStatus(PreProcStatus())
-				message = self.p.preproc(x.id, x.status)
-				if message == 0: self.logger.info('scene {0} processed'.format(x.id))
-				else: self.logger.info('scene {0} processing failed'.format(x.id))
+				self.p.preproc(x.id, x.status)
 				del self.p_queue[0]
 			time.sleep(5)
 
@@ -193,11 +191,11 @@ class Scheduler:
 				break
 			time.sleep(10)
 
+		# cleanup mistmatches
+		cleanup(self.db, self.cur, self.p.h5F)
+
 		# shutdown preproc
-		cleanup(self.p.db, self.p.cur, self.p.h5F)
 		self.p.h5F.close()
-		self.p.cur.close()
-		self.p.db.close()
 		self.logger.warning('HDF5 resources closed')
 
 		# shutdown self
