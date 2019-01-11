@@ -1,0 +1,11 @@
+# Service Parameters
+data_dir: /opt/svc/service_collect_landsat/service_collect_landsat/resources/data
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  pass:
+  db: earthdat
+# Data Paramters
+google_api_url: 'http://storage.googleapis.com/earthengine-public/landsat/'
+sear_api_url: 'https://api.developmentseed.org/satellites/landsat'

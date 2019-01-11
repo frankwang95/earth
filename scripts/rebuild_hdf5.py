@@ -7,7 +7,7 @@ from datacollection.utils import generateFilePathStr
 from datacollection.landsat.preprocH import LandsatPreProcess
 from datacollection.landsat.data_import_utils import cleanup
 
-def rebuild_hdf5():
+def rebuild_hdf5(data_dir):
 	print("Regenerating HDF5 file...")
 	# Get lids from image index
 	db = sql.connect(
@@ -24,9 +24,9 @@ def rebuild_hdf5():
 	print("Found {} scenes to add".format(len(lids)))
 
 	# Create new HDF5 database removing old one if needed
-	if os.path.isfile(generateFilePathStr(kind='database')):
-		os.remove(generateFilePathStr(kind='database'))
-	h5F = h5py.File(generateFilePathStr(kind='database'), 'a', libver='latest')
+	if os.path.isfile(generateFilePathStr(data_dir, kind='database')):
+		os.remove(generateFilePathStr(data_dir, kind='database'))
+	h5F = h5py.File(generateFilePathStr(data_dir, kind='database'), 'a', libver='latest')
 
 	# Use PreProcH to reinsert all items from raw images
 	print
@@ -45,7 +45,7 @@ def rebuild_hdf5():
 		password=settings.DB_PASS
 	)
 	cur = db.cursor()
-	cleanup(db, cur, h5F)
+	cleanup(data_dir, db, cur, h5F)
 	cur.close()
 	db.close()
 	h5F.close()
