@@ -52,7 +52,7 @@ def check_create_folder(folder_path):
 # =================== SQL =================== #
 
 def check_scene_exists(sceneid, db, cur):
-    enterCmd = 'SELECT lid FROM imageindex WHERE lid="{0};"'.format(sceneid)
+    enterCmd = 'SELECT lid FROM imageindex WHERE lid="{0}";'.format(sceneid)
     code = cur.execute(enterCmd)
     return code != 0
 

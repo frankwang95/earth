@@ -6,9 +6,4 @@ requests
 cython
 scipy
 pillow
-dash
-dash-renderer
-dash-html-components
-dash-core-components
-plotly
 sqlalchemy

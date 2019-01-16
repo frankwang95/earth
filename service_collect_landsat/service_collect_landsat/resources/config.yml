@@ -1,5 +1,6 @@
 # Service Parameters
 data_dir: /opt/svc/service_collect_landsat/service_collect_landsat/resources/data
+port: 8000
 mysql:
   host: 127.0.0.1
   port: 3306
