@@ -1,7 +1,6 @@
 import os
 import time
 from os.path import exists, getsize
-import h5py
 import MySQLdb as sql
 import tarfile
 
@@ -38,13 +37,12 @@ class Preprocessor(object):
                 tar.extractall(generate_file_path(self.data_dir, sceneid, 'raw'))
             os.remove(generate_file_path(self.data_dir, sceneid, 'raw', 'tar'))
 
-            with h5py.File(generate_file_path(self.data_dir, kind='database'), 'a', libver='latest') as h5F:
-                preProcObj = LandsatPreProcess(self.data_dir, sceneid, h5F)
-                preProcObj.generateDownsize()
-                preProcObj.generateVisible()
-                preProcObj.writeHDF()
-                preProcObj.writeVis()
-                preProcObj.metadataInsert(sceneid, db, cur)
+            preProcObj = LandsatPreProcess(self.data_dir, sceneid)
+            preProcObj.generateDownsize()
+            preProcObj.generateVisible()
+            preProcObj.writeHDF()
+            preProcObj.writeVis()
+            preProcObj.metadataInsert(sceneid, db, cur)
 
         except:
             self.logger.exception('problem encountered while preprocessing scene: {}'.format(sceneid))

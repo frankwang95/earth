@@ -15,18 +15,25 @@ from service_collect_landsat.src.cython import (
 )
 
 
-
 ############################### IMAGERY #############################
 bands = ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'BQA']
 
 
-
 ############################### PROCESS #############################
 class LandsatPreProcess:
-	def __init__(self, data_dir, sceneid, h5F):
+	""" Class which implements the each of the functions applied to an landsat image at the time of insertion into our
+		databases. The class is instantiated for a fixed landsat image which must have already been downloaded. For detailed
+		documentation of the structure of data store see the files in data-collection/documentation/.
+
+	Args:
+		data_dir <str>: The path to the root data directory. Needed to derive the filepath to the uncompressed downloaded
+			file and the paths where the completed images are placed.
+		sceneid <str>: The landsat ID of the scene to be processed.
+	"""
+	def __init__(self, data_dir, sceneid):
 		self.data_dir = data_dir
 		self.id = sceneid
-		self.h5F = h5F
+		self.visible = None
 
 		self.images = {}
 		for b in bands:
@@ -34,6 +41,9 @@ class LandsatPreProcess:
 
 
 	def generateVisible(self):
+		""" Computes a RGB 8-bit color image array from the separated 1-channel 16-bit R, G, and B channels included in the
+			raw data and makes it avaialbe under the `visible` attribute of this class.
+		"""
 		self.visible = np.dstack((
 			self.images['B4'],
 			self.images['B3'],
@@ -43,6 +53,9 @@ class LandsatPreProcess:
 
 
 	def generateDownsize(self):
+		""" Computes downsized versions of each raw band and replaces the original full size arrays stored in the `image`
+			attribute of each class. Each new array is half (rounded down) the width and length of the orignal arrays.
+		"""
 		for b in bands:
 			outRes = np.zeros((int(self.images[b].shape[0]/2), int(self.images[b].shape[1]/2)), dtype='uint16')
 			pyDownsize(self.images[b], outRes)
@@ -52,8 +65,13 @@ class LandsatPreProcess:
 			py16to8(self.images[b], outBit)
 			self.images[b] = outBit
 
-	# CURRENTLY OUT OF PRODUCTION
+
 	def generatePanVisible(self):
+		""" Implements the logic for generating an upsampled visible image using the larger B8 band. The resulting upsampled
+			image is stored under the `visibleInter` attribute of this class.
+
+			Note: This method is not currently a part of the defined process pipeline and is being included here for reference.
+		"""
 		if type(self.visibleInter) == type(True):
 			self.generateVisible()
 
@@ -72,22 +90,23 @@ class LandsatPreProcess:
 
 
 	def writeHDF(self):
-		self.h5F.create_group(self.id)
-		for b in bands:
-			self.h5F.create_dataset(generate_file_path(self.data_dir, self.id, 'database', b), data=self.images[b], chunks=True)
+		""" Writes the computed downsized raw arrays into the HDF5 file store.
+		"""
+		with h5py.File(generate_file_path(self.data_dir, kind='database'), 'a', libver='latest') as h5F:
+			h5F.create_group(self.id)
+			for b in bands:
+				h5F.create_dataset(generate_file_path(self.data_dir, self.id, 'database', b), data=self.images[b], chunks=True)
 
 
 	def writeVis(self):
+		""" Writes the computed visible image to a jpeg in the preprocessed folder. Must be called after generateVisible.
+		"""
 		Image.fromarray(self.visible).save(generate_file_path(self.data_dir, self.id, 'preproc', 'visible'))
 
 
-	# CURRENTLY OUT OF PRODUCTION
-	def writePanVis(self): # code 1
-		self.generatePanVisible()
-		writeImg(self.visibleInter, generate_file_path(self.data_dir, self.id, 'preproc', 'visible'))
-
-
 	def metadataInsert(self, sceneid, db, cur):
+		""" Writes the metadata found with the landsat scene to our MySQL database.
+		"""
 		with open(generate_file_path(self.data_dir, sceneid, 'raw', 'metadata'), 'r') as h:
 			rawMetaData = h.readlines()
 

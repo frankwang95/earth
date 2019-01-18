@@ -31,6 +31,9 @@ class Downloader(object):
 					f.write(chunk)
 			f.close()
 
+		else:
+			raise Exception("scene {} was not found on the remote server")
+
 
 	def get_url(self, sat):
 		""" gets google download url given an interpreted scene ID
