@@ -36,8 +36,8 @@ class LandsatPreProcess:
 		self.visible = None
 
 		self.images = {}
-		for b in bands:
-			self.images[b] = np.array(Image.open(generate_file_path(self.data_dir, sceneid, 'raw', b)), dtype = 'uint16')
+		# for b in bands:
+		# 	self.images[b] = np.array(Image.open(generate_file_path(self.data_dir, sceneid, 'raw', b)), dtype = 'uint16')
 
 
 	def generateVisible(self):
@@ -104,15 +104,17 @@ class LandsatPreProcess:
 		Image.fromarray(self.visible).save(generate_file_path(self.data_dir, self.id, 'preproc', 'visible'))
 
 
-	def metadataInsert(self, sceneid, db, cur):
+	def metadataInsert(self, db, cur):
 		""" Writes the metadata found with the landsat scene to our MySQL database.
 		"""
-		with open(generate_file_path(self.data_dir, sceneid, 'raw', 'metadata'), 'r') as h:
+		with open(generate_file_path(self.data_dir, self.id, 'raw', 'metadata'), 'r') as h:
 			rawMetaData = h.readlines()
 
 		splitTags = [i.strip().split(' = ') for i in rawMetaData]
 		splitTags = {x[0]:x[1] for x in splitTags if len(x) >= 2}
 
+		row = splitTags['WRS_ROW']
+		col = splitTags['WRS_PATH']
 		time = splitTags['DATE_ACQUIRED'] + ' ' + splitTags['SCENE_CENTER_TIME'][1:9]
 		ul_lat = splitTags['CORNER_UL_LAT_PRODUCT']
 		ul_lon = splitTags['CORNER_UL_LON_PRODUCT']
@@ -137,8 +139,8 @@ class LandsatPreProcess:
 		earth_sun_dist = splitTags['EARTH_SUN_DISTANCE']
 		orientation = splitTags['ORIENTATION']
 
-		enterCmd = u'''INSERT INTO imageindex VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23});'''.format(
-		    sceneid,
+		enterCmd = u'''INSERT INTO imageindex VALUES ('{0}', '{1}', {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23}, {24}, {25});'''.format(
+		    self.id,
 		    time,
 		    ul_lat, ul_lon, ur_lat, ur_lon, ll_lat, ll_lon, lr_lat, lr_lon,
 		    ul_proj_x, ul_proj_y, ur_proj_x, ur_proj_y, ll_proj_x, ll_proj_y, lr_proj_x, lr_proj_y,
@@ -147,7 +149,9 @@ class LandsatPreProcess:
 		    sun_azimuth,
 		    sun_elev,
 		    earth_sun_dist,
-		    orientation
+		    orientation,
+			row,
+			col
 		)
 
 		cur.execute(enterCmd)

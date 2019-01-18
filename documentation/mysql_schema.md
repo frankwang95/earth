@@ -25,7 +25,9 @@ imageindex(
 	sun_azimuth DECIMAL(15,10),
 	sun_elev DECIMAL(15,10),
 	earth_sun_dist DECIMAL(15,10),
-	orientation VARCHAR(20)
+	orientation VARCHAR(20),
+	row SMALLINT UNSIGNED,
+	col SMALLINT UNSIGNED
 )
 '''
 

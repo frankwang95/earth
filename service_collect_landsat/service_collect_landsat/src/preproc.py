@@ -42,7 +42,7 @@ class Preprocessor(object):
             preProcObj.generateVisible()
             preProcObj.writeHDF()
             preProcObj.writeVis()
-            preProcObj.metadataInsert(sceneid, db, cur)
+            preProcObj.metadataInsert(db, cur)
 
         except:
             self.logger.exception('problem encountered while preprocessing scene: {}'.format(sceneid))
