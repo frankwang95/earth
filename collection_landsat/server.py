@@ -1,6 +1,6 @@
 import json
 
-from service_collect_landsat.src.scheduler import Scheduler
+from collection_landsat.src.scheduler import Scheduler
 from baseimage.config import CONFIG
 from baseimage.flask import get_flask_server
 

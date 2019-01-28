@@ -27,7 +27,7 @@ imageindex(
 	earth_sun_dist DECIMAL(15,10),
 	orientation VARCHAR(20),
 	row SMALLINT UNSIGNED,
-	col SMALLINT UNSIGNED
+	path SMALLINT UNSIGNED
 )
 '''
 

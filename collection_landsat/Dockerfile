@@ -1,6 +1,6 @@
 FROM baseimage
 
-ENV SERVICE_NAME service_collect_landsat
+ENV SERVICE_NAME collection_landsat
 
 ENV BASE_PATH $SVC_PATH/$SERVICE_NAME/
 RUN mkdir $BASE_PATH

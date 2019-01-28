@@ -5,9 +5,9 @@ from queue import Queue
 from baseimage.logger import get_default_logger
 from baseimage.config import CONFIG
 from baseimage.path_resolution import generate_file_path, check_create_folder
-import service_collect_landsat.src.download as download
-import service_collect_landsat.src.preproc as preproc
-from service_collect_landsat.src.data_import_utils import check_scene_exists
+import collection_landsat.src.download as download
+import collection_landsat.src.preproc as preproc
+from collection_landsat.src.data_import_utils import check_scene_exists
 
 
 class Scheduler:

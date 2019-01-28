@@ -3,7 +3,7 @@ import requests
 
 from baseimage.config import CONFIG
 from baseimage.path_resolution import generate_file_path, check_create_folder
-from service_collect_landsat.src.data_import_utils import (
+from collection_landsat.src.data_import_utils import (
 	url_builder,
 	remote_file_exists,
 	scene_interpreter

@@ -6,7 +6,7 @@ from PIL import Image
 Image.MAX_IMAGE_PIXELS = 1000000000
 
 from baseimage.path_resolution import generate_file_path, check_create_folder
-from service_collect_landsat.src.cython import (
+from collection_landsat.src.cython import (
 	pyBilinearInter,
 	pyLuminosityBlend,
 	pyAdjustLevels,
@@ -114,7 +114,7 @@ class LandsatPreProcess:
 		splitTags = {x[0]:x[1] for x in splitTags if len(x) >= 2}
 
 		row = splitTags['WRS_ROW']
-		col = splitTags['WRS_PATH']
+		path = splitTags['WRS_PATH']
 		time = splitTags['DATE_ACQUIRED'] + ' ' + splitTags['SCENE_CENTER_TIME'][1:9]
 		ul_lat = splitTags['CORNER_UL_LAT_PRODUCT']
 		ul_lon = splitTags['CORNER_UL_LON_PRODUCT']
@@ -151,7 +151,7 @@ class LandsatPreProcess:
 		    earth_sun_dist,
 		    orientation,
 			row,
-			col
+			path
 		)
 
 		cur.execute(enterCmd)

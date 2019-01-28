@@ -5,9 +5,9 @@ import MySQLdb as sql
 import tarfile
 
 from baseimage.config import CONFIG
-from service_collect_landsat.src.data_import_utils import purge_scene
+from collection_landsat.src.data_import_utils import purge_scene
 from baseimage.path_resolution import generate_file_path
-from service_collect_landsat.src.preprocH import *
+from collection_landsat.src.preprocH import *
 
 
 

@@ -3,11 +3,11 @@ This services opens an API to control the acquisition of landsat imagery. Outsid
 # Installing and Running the Service
 
 ```
-docker build . -t service_collect_landsat
+docker build . -t collection_landsat
 ```
 ```
 export DATA_DIR=/home/fwang/earth_data/
-docker run -it --network=host -v $DATA_DIR:/opt/svc/service_collect_landsat/service_collect_landsat/resources/data service_collect_landsat
+docker run -it --network=host -v $DATA_DIR:/opt/svc/collection_landsat/collection_landsat/resources/data collection_landsat
 ```
 
 # API
