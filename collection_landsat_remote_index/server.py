@@ -19,7 +19,7 @@ interface = LocalInterface()
 
 # workers
 worker_logger = get_default_logger('worker')
-lsrit = LandSatRemoteIndexTask(worker_logger, {})
+lsrit = LandSatRemoteIndexTask(worker_logger, CONFIG['mysql'])
 worker_thread = threading.Thread(target=Worker, args=(interface, lsrit.main, worker_logger))
 worker_thread.setDaemon(True)
 worker_thread.start()

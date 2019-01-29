@@ -32,18 +32,18 @@ class LandSatRemoteIndexEntry(object):
 class LandSatRemoteIndexBatchWriter(BatchWriter):
     def __init__(self, logger, sql_parameters, batch_size=64):
         template = {
-        	'scene_id': 'lid',
+        	'lid': 'scene_id',
         	'aquisition_date': 'aquisition_date',
         	'ingestion_date': 'ingestion_date',
         	'category': 'category',
         	'correction_level': 'correction_level',
-        	'ls_row': 'row',
-        	'ls_path': 'path',
-        	'cloud_coverage': 'cloud_cover',
+        	'row': 'ls_row',
+        	'path': 'ls_path',
+        	'cloud_cover': 'cloud_coverage',
         	'sun_azimuth': 'sun_azimuth',
-        	'sun_elevation': 'sun_elev'
+        	'sun_elev': 'sun_elevation'
         }
-        table_name = 'imageindex_remote'
+        table_name = 'remote_imageindex'
         super().__init__(logger, template, table_name, sql_parameters, batch_size)
 
 
