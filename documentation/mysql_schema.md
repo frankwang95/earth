@@ -1,5 +1,7 @@
-# --------- Image Index Database
-# --------- Entries are consistent with Landsat 8 metadata - see their documentation
+# Image Index Database
+
+Entries in this database are populated from the included Landsat 8 metadata. Specific details about any of the fields found here can be obtained by reference to the LandSat documentation.
+
 '''
 imageindex(
 	lid CHAR(21) NOT NULL PRIMARY KEY,
@@ -26,48 +28,25 @@ imageindex(
 	sun_elev DECIMAL(15,10),
 	earth_sun_dist DECIMAL(15,10),
 	orientation VARCHAR(20),
-	row SMALLINT UNSIGNED,
-	path SMALLINT UNSIGNED
+	ls_row SMALLINT UNSIGNED,
+	ls_path SMALLINT UNSIGNED
 )
 '''
 
 
-# --------- Table recording status for each labeled entry for the cloud-segmentation project
-'''
-cloud_detection_clustering(
-	lid CHAR(21) NOT NULL PRIMARY KEY,
-	result SMALLINT UNSIGNED NOT NULL
-)
-'''
+# Remote Image Index Database
 
-# result coding:
-# -- 0 success
-# -- 1 failed
-# -- 2 snow
-
-
-# --------- Labeled open Danish AIS data
 '''
-denmark_ais(
-	entry_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	timestamp DATETIME,
-	vessel_type TEXT,
-	mmsi INT UNSIGNED,
-	latitude DOUBLE,
-	longitude DOUBLE,
-	navigational_status TEXT,
-	rate_of_turn FLOAT,
-	speed_over_ground FLOAT,
-	course_over_ground FLOAT,
-	heading SMALLINT UNSIGNED,
-	imo INT UNSIGNED,
-	callsign VARCHAR(16),
-	name TEXT,
-	ship_type TEXT,
-	width SMALLINT UNSIGNED,
-	length SMALLINT UNSIGNED,
-	position_fixing_method TEXT,
-	draught FLOAT UNSIGNED,
-	data_source TEXT
+remote_imageindex(
+	lid CHAR(50) NOT NULL PRIMARY KEY,
+	aquisition_date DATETIME,
+	ingestion_date DATETIME,
+	category VARCHAR(3),
+	correction_level VARCHAR(5),
+	ls_row SMALLINT UNSIGNED,
+	ls_path SMALLINT UNSIGNED,
+	cloud_cover DECIMAL(4,2),
+	sun_azimuth DECIMAL(15,10),
+	sun_elev DECIMAL(15,10)
 )
 '''
