@@ -22,8 +22,8 @@ imageindex(
 	ll_proj_y DECIMAL(15,7),
 	lr_proj_x DECIMAL(15,7),
 	lr_proj_y DECIMAL(15,7),
-	cloud_cover DECIMAL(4,2),
-	roll_angle DECIMAL(5,4),
+	cloud_cover DECIMAL(15,10),
+	roll_angle DECIMAL(15,10),
 	sun_azimuth DECIMAL(15,10),
 	sun_elev DECIMAL(15,10),
 	earth_sun_dist DECIMAL(15,10),
@@ -45,7 +45,7 @@ remote_imageindex(
 	correction_level VARCHAR(5),
 	ls_row SMALLINT UNSIGNED,
 	ls_path SMALLINT UNSIGNED,
-	cloud_cover DECIMAL(4,2),
+	cloud_cover DECIMAL(15,10),
 	sun_azimuth DECIMAL(15,10),
 	sun_elev DECIMAL(15,10)
 )

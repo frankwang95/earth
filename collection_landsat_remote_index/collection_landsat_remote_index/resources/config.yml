@@ -1,0 +1,9 @@
+# Service Parameters
+port: 3000
+mysql:
+  host:
+  port:
+  user:
+  passwd:
+  db:
+api_url: 'https://landsat.services.remotepixel.ca'
