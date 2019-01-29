@@ -39,9 +39,9 @@ class LandSatRemoteIndexBatchWriter(BatchWriter):
         	'correction_level': 'correction_level',
         	'row': 'ls_row',
         	'path': 'ls_path',
-        	'cloud_cover': 'cloud_coverage',
+        	'cloud_coverage': 'cloud_cover',
         	'sun_azimuth': 'sun_azimuth',
-        	'sun_elev': 'sun_elevation'
+        	'sun_elevation': 'sun_elev'
         }
         table_name = 'remote_imageindex'
         super().__init__(logger, template, table_name, sql_parameters, batch_size)
