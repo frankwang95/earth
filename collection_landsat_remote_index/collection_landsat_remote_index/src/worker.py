@@ -8,7 +8,7 @@ class LandSatRemoteIndexEntry(object):
     def __init__(self, entry_dict):
         self.json = entry_dict
 
-        self.scene_id = self.json['scene_id']
+        self.lid = self.json['scene_id']
         self.category = self.json['category']
         self.sensor = self.json['sensor']
         self.satellite = self.json['satellite']
@@ -32,7 +32,7 @@ class LandSatRemoteIndexEntry(object):
 class LandSatRemoteIndexBatchWriter(BatchWriter):
     def __init__(self, logger, sql_parameters, batch_size=64):
         template = {
-        	'lid': 'scene_id',
+        	'lid': 'lid',
         	'aquisition_date': 'aquisition_date',
         	'ingestion_date': 'ingestion_date',
         	'category': 'category',
