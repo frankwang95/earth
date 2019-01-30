@@ -1,5 +1,6 @@
 import threading
 import json
+from flask import request
 
 from baseimage.config import CONFIG
 from baseimage.flask import get_flask_server
