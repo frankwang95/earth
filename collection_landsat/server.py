@@ -39,10 +39,9 @@ server = get_flask_server()
 
 @server.route('/push', methods=["POST"])
 def push():
-    row = request.args.get('row', type=int, default=None)
-    path = request.args.get('path', type=int, default=None)
+    row = request.args.get('lid', type=int, default=None)
     assert type(row) == type(path)
-    return json.dumps(scheduler.push_next_block(row=row, path=path))
+    return json.dumps(scheduler.push_next_block(lid=lid))
 
 
 @server.route('/get_queue')
