@@ -2,7 +2,7 @@ from lib_learning.collection.base_generator import WorkBlockGenerator
 
 
 class LandSatRemoteIndexBlockGenerator(WorkBlockGenerator):
-    def __init__(self, base_api, start_row=1, start_path=1, max_row=248, max_path=233):
+    def __init__(self, base_api, start_row=1, start_path=1, max_row=248, max_path=251):
         self.base_api = base_api
         self.max_row = max_row
         self.max_path = max_path

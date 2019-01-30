@@ -18,7 +18,14 @@ class LandSatRemoteIndexEntry(object):
         self.sun_azimuth = self.json['sun_azimuth']
         self.sun_elevation = self.json['sun_elevation']
         self.cloud_coverage = self.json['cloud_coverage']
-        # add geometry parsing
+        self.ul_lat = self.json['geometry']['coordinates'][0][1][1]
+        self.ul_lon = self.json['geometry']['coordinates'][0][1][0]
+        self.ur_lat = self.json['geometry']['coordinates'][0][0][1]
+        self.ur_lon = self.json['geometry']['coordinates'][0][0][0]
+        self.ll_lat = self.json['geometry']['coordinates'][0][2][1]
+        self.ll_lon = self.json['geometry']['coordinates'][0][2][0]
+        self.lr_lat = self.json['geometry']['coordinates'][0][3][1]
+        self.lr_lon = self.json['geometry']['coordinates'][0][3][0]
 
         if self.category == 'pre':
             self.ingestion_date = None
@@ -41,7 +48,15 @@ class LandSatRemoteIndexBatchWriter(BatchWriter):
         	'path': 'ls_path',
         	'cloud_coverage': 'cloud_cover',
         	'sun_azimuth': 'sun_azimuth',
-        	'sun_elevation': 'sun_elev'
+        	'sun_elevation': 'sun_elev',
+        	'ul_lat': 'ul_lat',
+        	'ul_lon': 'ul_lon',
+        	'ur_lat': 'ur_lat',
+        	'ur_lon': 'ur_lon',
+        	'll_lat': 'll_lat',
+        	'll_lon': 'll_lon',
+        	'lr_lat': 'lr_lat',
+        	'lr_lon': 'lr_lon'
         }
         table_name = 'remote_imageindex'
         super().__init__(logger, template, table_name, sql_parameters, batch_size)

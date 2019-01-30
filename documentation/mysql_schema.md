@@ -47,6 +47,14 @@ remote_imageindex(
 	ls_path SMALLINT UNSIGNED,
 	cloud_cover DECIMAL(15,10),
 	sun_azimuth DECIMAL(15,10),
-	sun_elev DECIMAL(15,10)
+	sun_elev DECIMAL(15,10),
+	ul_lat DECIMAL(15,10),
+	ul_lon DECIMAL(15,10),
+	ur_lat DECIMAL(15,10),
+	ur_lon DECIMAL(15,10),
+	ll_lat DECIMAL(15,10),
+	ll_lon DECIMAL(15,10),
+	lr_lat DECIMAL(15,10),
+	lr_lon DECIMAL(15,10)
 )
 '''

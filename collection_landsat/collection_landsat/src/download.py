@@ -17,13 +17,12 @@ class Downloader(object):
 
 
 	def download(self, sceneid):
-		check_create_folder(generate_file_path(self.data_dir, sceneid, 'raw'))
-
 		interpScene = scene_interpreter(sceneid)
 		url = self.get_url(interpScene)
 		check = remote_file_exists(url)
 
 		if remote_file_exists(url):
+			check_create_folder(generate_file_path(self.data_dir, sceneid, 'raw'))
 			r = requests.get(url, stream=True, timeout=5)
 			f = open(generate_file_path(self.data_dir, sceneid, 'raw', 'tar'), 'wb')
 			for chunk in r.iter_content(chunk_size=2048):
@@ -32,7 +31,7 @@ class Downloader(object):
 			f.close()
 
 		else:
-			raise Exception("scene {} was not found on the remote server")
+			raise Exception("scene {} was not found on the remote server".format(sceneid))
 
 
 	def get_url(self, sat):
