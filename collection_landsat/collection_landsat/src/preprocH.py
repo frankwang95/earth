@@ -5,7 +5,7 @@ import functools as fT
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = 1000000000
 
-from baseimage.path_resolution import generate_file_path, check_create_folder
+from lib_core.path_resolution.path_resolution import generate_file_path, check_create_folder
 from collection_landsat.src.cython import (
 	pyBilinearInter,
 	pyLuminosityBlend,

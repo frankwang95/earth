@@ -2,11 +2,11 @@
 data_dir: /opt/svc/collection_landsat/collection_landsat/resources/data
 port: 8000
 mysql:
-  host: 127.0.0.1
-  port: 3306
-  user: root
-  pass:
-  db: earthdat
+  host:
+  port:
+  user:
+  passwd:
+  db:
 # Data Paramters
 google_api_url: 'http://storage.googleapis.com/earthengine-public/landsat/'
-sear_api_url: 'https://api.developmentseed.org/satellites/landsat'
+search_api_url: 'https://api.developmentseed.org/satellites/landsat'

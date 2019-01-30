@@ -4,24 +4,18 @@ from os.path import exists, getsize
 import MySQLdb as sql
 import tarfile
 
-from baseimage.config import CONFIG
 from collection_landsat.src.data_import_utils import purge_scene
-from baseimage.path_resolution import generate_file_path
+from lib_core.path_resolution.path_resolution import generate_file_path
 from collection_landsat.src.preprocH import *
 
 
 
 ############################# PREPROCESSOR CLASS #############################
 class Preprocessor(object):
-    def __init__(self, logger):
+    def __init__(self, data_dir, sql_parameters, logger):
         self.logger = logger
-        self.data_dir = CONFIG['data_dir']
-        self.sql_parameters = {
-            'db': CONFIG['mysql']['db'],
-            'host': CONFIG['mysql']['host'],
-            'user': CONFIG['mysql']['user'],
-            'passwd': CONFIG['mysql']['pass']
-        }
+        self.data_dir = data_dir
+        self.sql_parameters = sql_parameters
 
 
     def preproc(self, sceneid):
