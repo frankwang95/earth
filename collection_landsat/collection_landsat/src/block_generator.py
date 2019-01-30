@@ -1,4 +1,6 @@
 import time
+import MySQLdb as sql
+
 from lib_learning.collection.base_generator import WorkBlockGenerator
 from collection_landsat.src.data_import_utils import check_scene_exists
 
