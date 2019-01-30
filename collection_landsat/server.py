@@ -39,7 +39,7 @@ server = get_flask_server()
 
 @server.route('/push', methods=["POST"])
 def push():
-    lid = request.args.get('lid', type=int, default=None)
+    lid = request.args.get('lid', type=str, default=None)
     return json.dumps(scheduler.push_next_block(lid=lid))
 
 
