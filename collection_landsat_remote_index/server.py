@@ -33,6 +33,7 @@ scheduler = Scheduler(
 )
 
 # service server
+# TODO: endpoints here should be standardized and moved into lib_learning.collection
 server = get_flask_server()
 
 
